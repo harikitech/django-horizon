@@ -2,17 +2,17 @@
 # -*- coding: utf-8 -*-
 
 """
-test_django_horizon
+test_horizon
 ----------------------------------
 
-Tests for `django_horizon` module.
+Tests for `horizon` module.
 """
 
 
 import sys
 import unittest
 
-from django_horizon import django_horizon
+from horizon import horizon
 
 
 

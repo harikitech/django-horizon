@@ -18,23 +18,22 @@ test_requirements = [
 ]
 
 setup(
-    name='django_horizon',
+    name='django-horizon',
     version='0.0.1',
     description="Simple database sharding (horizontal partitioning) library for Django applications.",
     long_description=readme + '\n\n' + history,
     author="UNCOVER TRUTH Inc.",
     author_email='develop@uncovertruth.co.jp',
-    url='https://github.com/uncovertruth/django_horizon',
+    url='https://github.com/uncovertruth/django-horizon',
     packages=[
-        'django_horizon',
+        'horizon',
     ],
-    package_dir={'django_horizon':
-                 'django_horizon'},
+    package_dir={'horizon': 'horizon'},
     include_package_data=True,
     install_requires=requirements,
     license="MIT license",
     zip_safe=False,
-    keywords='django_horizon',
+    keywords='django-horizon, sharding, horizontal partitioning, database, django',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
