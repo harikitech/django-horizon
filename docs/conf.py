@@ -31,6 +31,13 @@ project_root = os.path.dirname(cwd)
 # version is used.
 sys.path.insert(0, project_root)
 
+# Setup Django project
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'tests.test_settings')
+import django
+if hasattr(django, 'setup'):
+    django.setup()
+
+
 import horizon
 
 # -- General configuration ---------------------------------------------
