@@ -25,13 +25,10 @@ setup(
     version=horizon.__version__,
     description="Simple database sharding (horizontal partitioning) library for Django applications.",
     long_description=readme + '\n\n' + history,
-    author="UNCOVER TRUTH Inc.",
-    author_email='develop@uncovertruth.co.jp',
+    author=horizon.__author__,
+    author_email=horizon.__email__,
     url='https://github.com/uncovertruth/django-horizon',
     packages=find_packages(exclude=('tests', 'docs')),
-    package_dir={
-        'horizon': 'horizon',
-    },
     include_package_data=True,
     install_requires=requirements,
     license="MIT license",
@@ -56,6 +53,6 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
     ],
-    test_suite='tests',
+    test_suite='runtests',
     tests_require=test_requirements
 )

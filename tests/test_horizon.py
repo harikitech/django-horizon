@@ -1,19 +1,9 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-"""
-test_horizon
-----------------------------------
-
-Tests for `horizon` module.
-"""
-
 
 import sys
 import unittest
 
-from horizon import horizon
-
+import horizon
 
 
 class TestDjango_horizon(unittest.TestCase):
@@ -25,4 +15,5 @@ class TestDjango_horizon(unittest.TestCase):
         pass
 
     def test_000_something(self):
+        print(sys.path)
         pass
