@@ -6,9 +6,11 @@ from django.core import checks
 from django.core.exceptions import FieldDoesNotExist
 from django.db import models
 from django.db.models import options
+from django.utils.functional import cached_property
 
 from .manager import HorizontalManager
 from .settings import get_config
+from .utils import get_metadata_model
 
 
 OPTION_NAMES = (
@@ -85,6 +87,23 @@ class AbstractHorizontalModel(models.Model):
                     id='horizon.E003',
                 ),
             ]
+
+    @cached_property
+    def _horizontal_key(self):
+        key_field = self._meta.get_field(self._meta.horizontal_key)
+        return getattr(self, key_field.attname)
+
+    @cached_property
+    def _horizontal_database_index(self):
+        metadata_model = get_metadata_model()
+        return metadata_model.objects.get(
+            group=self._meta.horizontal_group,
+            key=self._horizontal_key,
+        ).index
+
+    @classmethod
+    def _get_horizontal_database_set(cls):
+        return get_config()['GROUPS'][cls._meta.horizontal_group]['DATABASE_SET']
 
     class Meta(object):
         abstract = True

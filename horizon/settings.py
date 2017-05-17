@@ -8,7 +8,7 @@ from django.utils.lru_cache import lru_cache
 
 CONFIG_DEFAULTS = {
     'GROUPS': {},
-    'METADATA_STORE': None,
+    'METADATA_MODEL': None,
 }
 
 
@@ -20,9 +20,9 @@ def get_config():
     CONFIG.update(USER_CONFIG)
 
     for name, horizontal_group in CONFIG['GROUPS'].items():
-        horizontal_group['MIGRATE'] = set()
+        horizontal_group['DATABASE_SET'] = set()
         for key, member in horizontal_group['DATABASES'].items():
-            horizontal_group['MIGRATE'].add(member['write'])
-            horizontal_group['MIGRATE'].update(member.get('read', []))
+            horizontal_group['DATABASE_SET'].add(member['write'])
+            horizontal_group['DATABASE_SET'].update(member.get('read', []))
 
     return CONFIG

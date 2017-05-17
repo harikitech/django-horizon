@@ -62,4 +62,5 @@ HORIZONTAL_CONFIG = {
             'PICKABLES': [2, 3],
         },
     },
+    'METADATA_MODEL': 'tests.HorizontalMetadata',
 }
