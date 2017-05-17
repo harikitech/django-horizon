@@ -5,7 +5,6 @@ from setuptools import find_packages, setup
 
 import horizon
 
-
 with open('README.rst') as readme_file:
     readme = readme_file.read()
 
@@ -23,7 +22,9 @@ test_requirements = [
 setup(
     name='django-horizon',
     version=horizon.__version__,
-    description="Simple database sharding (horizontal partitioning) library for Django applications.",
+    description=(
+        "Simple database sharding (horizontal partitioning) library for Django applications."
+    ),
     long_description=readme + '\n\n' + history,
     author=horizon.__author__,
     author_email=horizon.__email__,
@@ -33,7 +34,7 @@ setup(
     install_requires=requirements,
     license="MIT license",
     zip_safe=False,
-    keywords='django-horizon, sharding, horizontal partitioning, database, django',
+    keywords='django-horizon, django, sharding, horizontal partitioning, database',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Environment :: Web Environment',

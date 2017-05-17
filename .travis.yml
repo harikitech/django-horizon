@@ -1,32 +1,58 @@
-# Config file for automatic testing at travis-ci.org
-# This file will be regenerated if you run travis_pypi_setup.py
-
+sudo: false
 language: python
-python: 3.5
-
-env:
-  - TOXENV=py35
-  - TOXENV=py34
-  - TOXENV=py33
-  - TOXENV=py27
-  - TOXENV=py26
-  - TOXENV=pypy
-
-# command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
-install: pip install -U tox
-
-# command to run tests, e.g. python setup.py test
-script: tox -e ${TOXENV}
-
-# After you create the Github repo and add it to Travis, run the
-# travis_pypi_setup.py script to finish PyPI deployment setup
-deploy:
-  provider: pypi
-  distributions: sdist bdist_wheel
-  user: uncovertruth
-  password:
-    secure: PLEASE_REPLACE_ME
-  on:
-    tags: true
-    repo: uncovertruth/django_horizon
-    condition: $TOXENV == py27
+cache: pip
+matrix:
+  fast_finish: true
+  include:
+  - python: 2.7
+    env: TOX_ENV=py27-dj18
+  - python: 3.3
+    env: TOX_ENV=py33-dj18
+  - python: 3.4
+    env: TOX_ENV=py34-dj18
+  - python: 3.5
+    env: TOX_ENV=py34-dj18
+  - python: 2.7
+    env: TOX_ENV=py27-dj19
+  - python: 3.4
+    env: TOX_ENV=py34-dj19
+  - python: 3.5
+    env: TOX_ENV=py35-dj19
+  - python: 2.7
+    env: TOX_ENV=py27-dj110
+  - python: 3.4
+    env: TOX_ENV=py34-dj110
+  - python: 3.5
+    env: TOX_ENV=py35-dj110
+  - python: 2.7
+    env: TOX_ENV=py27-dj111
+  - python: pypy
+    env: TOX_ENV=pypy-dj111
+  - python: 3.4
+    env: TOX_ENV=py34-dj111
+  - python: 3.5
+    env: TOX_ENV=py35-dj111
+  - python: 3.6
+    env: TOX_ENV=py36-dj111
+  - python: pypy3
+    env: TOX_ENV=pypy3-dj111
+  - python: 3.5
+    env: TOX_ENV=py35-djdev
+  - python: 3.6
+    env: TOX_ENV=py36-djdev
+  - python: 3.6
+    env: TOX_ENV=flake8
+  - python: 3.6
+    env: TOX_ENV=isort
+  - python: 3.6
+    env: TOX_ENV=readme
+  - python: 3.6
+    env: TOX_ENV=check-manifest
+  allow_failures:
+  - env: TOX_ENV=py35-djdev
+  - env: TOX_ENV=py36-djdev
+  - env: TOX_ENV=pypy3-dj111
+install:
+- pip install -U tox
+script:
+- tox -e "${TOX_ENV}"

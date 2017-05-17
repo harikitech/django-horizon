@@ -3,7 +3,6 @@
 import os
 import sys
 
-
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'tests.test_settings')
 
 
@@ -19,6 +18,7 @@ def runtets():
     test_runner = TestRunner(verbosity=1, interactive=True)
     failures = test_runner.run_tests(['tests'])
     sys.exit(bool(failures))
+
 
 if __name__ == "__main__":
     runtets()
