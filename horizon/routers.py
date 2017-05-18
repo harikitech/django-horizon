@@ -49,5 +49,5 @@ class HorizontalRouter(object):
         if not horizontal_group:
             return
 
-        if db in model._get_horizontal_database_set():
+        if db in model._get_horizontal_config()['DATABASE_SET']:
             return True

@@ -25,4 +25,7 @@ def get_config():
             horizontal_group['DATABASE_SET'].add(member['write'])
             horizontal_group['DATABASE_SET'].update(member.get('read', []))
 
+        if 'PICKABLES' not in horizontal_group:
+            horizontal_group['PICKABLES'] = list(horizontal_group['DATABASES'].keys())
+
     return CONFIG

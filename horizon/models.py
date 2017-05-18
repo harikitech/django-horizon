@@ -2,6 +2,8 @@
 
 from __future__ import absolute_import, unicode_literals
 
+import random
+
 from django.core import checks
 from django.core.exceptions import FieldDoesNotExist
 from django.db import models
@@ -96,14 +98,18 @@ class AbstractHorizontalModel(models.Model):
     @cached_property
     def _horizontal_database_index(self):
         metadata_model = get_metadata_model()
-        return metadata_model.objects.get(
+        metadata, created = metadata_model.objects.get_or_create(
             group=self._meta.horizontal_group,
             key=self._horizontal_key,
-        ).index
+            defaults={
+                'index': random.choice(self._get_horizontal_config()['PICKABLES'])
+            },
+        )
+        return metadata.index
 
     @classmethod
-    def _get_horizontal_database_set(cls):
-        return get_config()['GROUPS'][cls._meta.horizontal_group]['DATABASE_SET']
+    def _get_horizontal_config(cls):
+        return get_config()['GROUPS'][cls._meta.horizontal_group]
 
     class Meta(object):
         abstract = True
