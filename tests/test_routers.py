@@ -109,26 +109,27 @@ class HorizontalRouterRelationTestCase(TestCase):
         self.user_b = user_modle.objects.create_user('egg')
 
     def test_allow_relation_in_same_database(self):
+        HorizontalMetadata.objects.create(group='a', key=self.user_a.id, index=1)
+        HorizontalMetadata.objects.create(group='a', key=self.user_b.id, index=1)
         p1 = HorizonParent.objects.create(user=self.user_a, spam='1st')
         p2 = HorizonParent.objects.create(user=self.user_b, spam='2nd')
         self.assertTrue(self.router.allow_relation(p1, p2))
+
+    def test_disallow_other_database(self):
+        HorizontalMetadata.objects.create(group='a', key=self.user_a.id, index=1)
+        HorizontalMetadata.objects.create(group='a', key=self.user_b.id, index=2)
+        p1 = HorizonParent.objects.create(user=self.user_a, spam='1st')
+        p2 = HorizonParent.objects.create(user=self.user_b, spam='2nd')
+        self.assertIsNone(self.router.allow_relation(p1, p2), "Other shard")
 
     def test_allow_relation_to_forein(self):
         p = HorizonParent.objects.create(user=self.user_a, spam='1st')
         c = HorizonChild.objects.create(user=self.user_a, parent=p)
         self.assertTrue(self.router.allow_relation(p, c))
 
-    def test_disallow_other_database(self):
+    def test_disallow_default_database(self):
         p = HorizonParent.objects.create(user=self.user_a, spam='1st')
         self.assertFalse(self.router.allow_relation(p, self.user_a))
-
-    @skip("TODO: Change database")
-    def test_disallow_other_horizontal_database(self):
-        HorizontalMetadata.objects.create(group='a', key=self.user_a.id, index=1)
-        HorizontalMetadata.objects.create(group='a', key=self.user_b.id, index=2)
-        p1 = HorizonParent.objects.create(user=self.user_a, spam='1st')
-        p2 = HorizonParent.objects.create(user=self.user_b, spam='2nd')
-        self.assertIsNone(self.router.allow_relation(p1, p2), "Other shard")
 
 
 class HorizontalRouterReadWriteTestCase(TestCase):

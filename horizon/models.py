@@ -90,6 +90,22 @@ class AbstractHorizontalModel(models.Model):
                 ),
             ]
 
+    @classmethod
+    def _get_horizontal_config(cls):
+        return get_config()['GROUPS'][cls._meta.horizontal_group]
+
+    @classmethod
+    def _get_or_create_horizontal_index(cls, horizontal_key):
+        metadata_model = get_metadata_model()
+        metadata, created = metadata_model.objects.get_or_create(
+            group=cls._meta.horizontal_group,
+            key=horizontal_key,
+            defaults={
+                'index': random.choice(cls._get_horizontal_config()['PICKABLES'])
+            },
+        )
+        return metadata.index
+
     @cached_property
     def _horizontal_key(self):
         key_field = self._meta.get_field(self._meta.horizontal_key)
@@ -97,19 +113,7 @@ class AbstractHorizontalModel(models.Model):
 
     @cached_property
     def _horizontal_database_index(self):
-        metadata_model = get_metadata_model()
-        metadata, created = metadata_model.objects.get_or_create(
-            group=self._meta.horizontal_group,
-            key=self._horizontal_key,
-            defaults={
-                'index': random.choice(self._get_horizontal_config()['PICKABLES'])
-            },
-        )
-        return metadata.index
-
-    @classmethod
-    def _get_horizontal_config(cls):
-        return get_config()['GROUPS'][cls._meta.horizontal_group]
+        return self._get_or_create_horizontal_index(self._horizontal_key)
 
     class Meta(object):
         abstract = True

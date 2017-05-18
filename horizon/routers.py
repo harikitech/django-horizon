@@ -2,25 +2,43 @@
 
 from __future__ import absolute_import, unicode_literals
 
+import random
+
 from django.apps import apps
+from django.db.utils import IntegrityError
 
 
 class HorizontalRouter(object):
     def _get_horizontal_group(self, model):
         return getattr(model._meta, 'horizontal_group', None)
 
-    def _get_database_for_instance(self, instance):
-        return instance._state.db or instance._()
+    def _get_horizontal_index(self, model, hints):
+        horizontal_group = self._get_horizontal_group(model)
+        if not horizontal_group:
+            return
+
+        instance = hints.get('instance', None)
+        if instance:
+            if not hasattr(instance, '_horizontal_database_index'):
+                return
+            return instance._horizontal_database_index
+
+        horizontal_key = hints.get('horizontal_key', None)
+        if not horizontal_key:
+            raise IntegrityError
+        return model._get_or_create_horizontal_index(horizontal_key)
 
     def db_for_read(self, model, **hints):
-        horizontal_group = self._get_horizontal_group(model)
-        if not horizontal_group:
+        horizontal_index = self._get_horizontal_index(model, hints)
+        if not horizontal_index:
             return
+        return random.choice(model._get_horizontal_config()['DATABASES'][horizontal_index]['read'])
 
     def db_for_write(self, model, **hints):
-        horizontal_group = self._get_horizontal_group(model)
-        if not horizontal_group:
+        horizontal_index = self._get_horizontal_index(model, hints)
+        if not horizontal_index:
             return
+        return model._get_horizontal_config()['DATABASES'][horizontal_index]['write']
 
     def allow_relation(self, obj1, obj2, **hints):
         horizontal_group_1 = self._get_horizontal_group(obj1._meta.model)
