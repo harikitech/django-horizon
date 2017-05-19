@@ -3,6 +3,7 @@
 from __future__ import absolute_import, unicode_literals
 
 from unittest import skip
+from mock import patch
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
@@ -135,7 +136,89 @@ class HorizontalRouterRelationTestCase(TestCase):
 class HorizontalRouterReadWriteTestCase(TestCase):
     def setUp(self):
         self.router = HorizontalRouter()
+        self.user_a = user_modle.objects.create_user('spam')
+        self.user_b = user_modle.objects.create_user('egg')
+        self.user_c = user_modle.objects.create_user('sushi')
+        HorizontalMetadata.objects.create(group='a', key=self.user_a.id, index=1)
+        HorizontalMetadata.objects.create(group='a', key=self.user_b.id, index=2)
+        HorizontalMetadata.objects.create(group='a', key=self.user_c.id, index=3)
+
+    def test_db_for_write(self):
+        with patch.object(HorizontalRouter, 'db_for_write', wraps=self.router.db_for_write) as mock_db_for_write:
+            HorizonParent.objects.create(user=self.user_a, spam='1st')
+            mock_db_for_write.assert_any_call(HorizonParent, horizontal_key=self.user_a.id)
+            self.assertEqual(
+                'a1-primary',
+                self.router.db_for_write(HorizonParent, horizontal_key=self.user_a.id),
+            )
+
+        with patch.object(HorizontalRouter, 'db_for_write', wraps=self.router.db_for_write) as mock_db_for_write:
+            HorizonParent.objects.create(user=self.user_b, spam='2nd')
+            mock_db_for_write.assert_any_call(HorizonParent, horizontal_key=self.user_b.id)
+            self.assertEqual(
+                'a2-primary',
+                self.router.db_for_write(HorizonParent, horizontal_key=self.user_b.id),
+            )
+
+        with patch.object(HorizontalRouter, 'db_for_write', wraps=self.router.db_for_write) as mock_db_for_write:
+            HorizonParent.objects.create(user=self.user_c, spam='1st')
+            mock_db_for_write.assert_any_call(HorizonParent, horizontal_key=self.user_c.id)
+            self.assertEqual(
+                'a3',
+                self.router.db_for_write(HorizonParent, horizontal_key=self.user_c.id),
+            )
+
+    def test_db_for_write_by_id(self):
+        with patch.object(HorizontalRouter, 'db_for_write', wraps=self.router.db_for_write) as mock_db_for_write:
+            HorizonParent.objects.create(user_id=self.user_a.id, spam='1st')
+            mock_db_for_write.assert_any_call(HorizonParent, horizontal_key=self.user_a.id)
+            self.assertEqual(
+                'a1-primary',
+                self.router.db_for_write(HorizonParent, horizontal_key=self.user_a.id),
+            )
+
+    def test_db_for_write_other_databases(self):
+        with patch.object(HorizontalRouter, 'db_for_write', wraps=self.router.db_for_write) as mock_db_for_write:
+            new_user = user_modle.objects.create_user('pizza')
+            mock_db_for_write.assert_any_call(user_modle, instance=new_user)
+            self.assertIsNone(self.router.db_for_write(user_modle, instance=new_user))
 
     def test_db_for_read(self):
-        user = user_modle.objects.create_user('spam')
-        HorizonParent.objects.using('a1-primary').create(user=user, spam='1st')
+        with patch.object(HorizontalRouter, 'db_for_read', wraps=self.router.db_for_read) as mock_db_for_read:
+            list(HorizonParent.objects.filter(user=self.user_a))
+            mock_db_for_read.assert_any_call(HorizonParent, horizontal_key=self.user_a.id)
+            self.assertIn(
+                self.router.db_for_read(HorizonParent, horizontal_key=self.user_a.id),
+                ['a1-replica-1', 'a1-replica-2'],
+            )
+
+        with patch.object(HorizontalRouter, 'db_for_read', wraps=self.router.db_for_read) as mock_db_for_read:
+            list(HorizonParent.objects.filter(user=self.user_b))
+            mock_db_for_read.assert_any_call(HorizonParent, horizontal_key=self.user_b.id)
+            self.assertIn(
+                self.router.db_for_read(HorizonParent, horizontal_key=self.user_b.id),
+                ['a2-replica'],
+            )
+
+        with patch.object(HorizontalRouter, 'db_for_read', wraps=self.router.db_for_read) as mock_db_for_read:
+            list(HorizonParent.objects.filter(user=self.user_c))
+            mock_db_for_read.assert_any_call(HorizonParent, horizontal_key=self.user_c.id)
+            self.assertIn(
+                self.router.db_for_read(HorizonParent, horizontal_key=self.user_c.id),
+                ['a3'],
+            )
+
+    def test_db_for_read_by_id(self):
+        with patch.object(HorizontalRouter, 'db_for_read', wraps=self.router.db_for_read) as mock_db_for_read:
+            list(HorizonParent.objects.filter(user_id=self.user_a.id))
+            mock_db_for_read.assert_any_call(HorizonParent, horizontal_key=self.user_a.id)
+            self.assertIn(
+                self.router.db_for_read(HorizonParent, horizontal_key=self.user_a.id),
+                ['a1-replica-1', 'a1-replica-2'],
+            )
+
+    def test_db_for_read_other_databases(self):
+        with patch.object(HorizontalRouter, 'db_for_read', wraps=self.router.db_for_read) as mock_db_for_read:
+            list(user_modle.objects.filter())
+            mock_db_for_read.assert_any_call(user_modle)
+            self.assertIsNone(self.router.db_for_read(user_modle))

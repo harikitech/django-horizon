@@ -95,6 +95,14 @@ class AbstractHorizontalModel(models.Model):
         return get_config()['GROUPS'][cls._meta.horizontal_group]
 
     @classmethod
+    def _get_horizontal_db_for_read(cls, index):
+        return random.choice(cls._get_horizontal_config()['DATABASES'][index]['read'])
+
+    @classmethod
+    def _get_horizontal_db_for_write(cls, index):
+        return cls._get_horizontal_config()['DATABASES'][index]['write']
+
+    @classmethod
     def _get_or_create_horizontal_index(cls, horizontal_key):
         metadata_model = get_metadata_model()
         metadata, created = metadata_model.objects.get_or_create(
