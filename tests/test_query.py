@@ -5,18 +5,16 @@ from __future__ import absolute_import, unicode_literals
 from mock import patch
 
 from django.contrib.auth import get_user_model
-from django.test import TestCase
 
 from horizon.query import HorizontalQuerySet
+from .base import HorizontalBaseTestCase
 from .models import HorizonParent, AnotherGroup
 
 
 user_model = get_user_model()
 
 
-class HorizontalQuerySetTestCase(TestCase):
-    multi_db = True
-
+class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
     def setUp(self):
         super(HorizontalQuerySetTestCase, self).setUp()
         self.user = user_model.objects.create_user('spam')

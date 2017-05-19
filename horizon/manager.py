@@ -8,4 +8,6 @@ from .query import HorizontalQuerySet
 
 
 class HorizontalManager(BaseManager.from_queryset(HorizontalQuerySet)):
-    pass
+    def __init__(self):
+        super(HorizontalManager, self).__init__()
+        self.name = 'horizontal'

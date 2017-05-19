@@ -50,7 +50,5 @@ class HorizontalQuerySet(QuerySet):
     def db(self):
         if self._horizontal_key is None:
             raise IntegrityError("Missing horizontal key field's filter")
-        print(self.model, self._horizontal_key, self._db)
-
         self._add_hints(horizontal_key=self._horizontal_key)
         return super(HorizontalQuerySet, self).db

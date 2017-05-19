@@ -3,17 +3,15 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.contrib.auth import get_user_model
-from django.test import TestCase
 
+from .base import HorizontalBaseTestCase
 from .models import HorizonChild, HorizonParent, AnotherGroup
 
 
 user_model = get_user_model()
 
 
-class HorizontalModelTestCase(TestCase):
-    multi_db = True
-
+class HorizontalModelTestCase(HorizontalBaseTestCase):
     def setUp(self):
         super(HorizontalModelTestCase, self).setUp()
         self.user_a = user_model.objects.create_user('spam')

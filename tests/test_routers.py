@@ -5,18 +5,16 @@ from __future__ import absolute_import, unicode_literals
 from mock import patch
 
 from django.contrib.auth import get_user_model
-from django.test import TestCase
 
 from horizon.routers import HorizontalRouter
+from .base import HorizontalBaseTestCase
 from .models import AnotherGroup, HorizonChild, HorizonParent, HorizontalMetadata
 
 
 user_model = get_user_model()
 
 
-class HorizontalRouterMigrationTestCase(TestCase):
-    multi_db = True
-
+class HorizontalRouterMigrationTestCase(HorizontalBaseTestCase):
     def setUp(self):
         super(HorizontalRouterMigrationTestCase, self).setUp()
         self.router = HorizontalRouter()
@@ -105,9 +103,7 @@ class HorizontalRouterMigrationTestCase(TestCase):
         )
 
 
-class HorizontalRouterRelationTestCase(TestCase):
-    multi_db = True
-
+class HorizontalRouterRelationTestCase(HorizontalBaseTestCase):
     def setUp(self):
         super(HorizontalRouterRelationTestCase, self).setUp()
         self.router = HorizontalRouter()
@@ -138,9 +134,7 @@ class HorizontalRouterRelationTestCase(TestCase):
         self.assertFalse(self.router.allow_relation(p, self.user_a))
 
 
-class HorizontalRouterReadWriteTestCase(TestCase):
-    multi_db = True
-
+class HorizontalRouterReadWriteTestCase(HorizontalBaseTestCase):
     def setUp(self):
         super(HorizontalRouterReadWriteTestCase, self).setUp()
         self.router = HorizontalRouter()
