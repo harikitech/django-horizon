@@ -40,3 +40,6 @@ class AnotherGroup(AbstractHorizontalModel):
     class Meta(object):
         horizontal_group = 'b'
         horizontal_key = 'user'
+        unique_together = (
+            ('user', 'egg'),
+        )

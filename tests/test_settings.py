@@ -11,16 +11,16 @@ INSTALLED_APPS = [
 DATABASES = {
     'default': {'ENGINE': 'django.db.backends.sqlite3'},
     'a1-primary': {'ENGINE': 'django.db.backends.sqlite3'},
-    'a1-replica-1': {'ENGINE': 'django.db.backends.sqlite3'},
-    'a1-replica-2': {'ENGINE': 'django.db.backends.sqlite3'},
+    'a1-replica-1': {'ENGINE': 'django.db.backends.sqlite3', 'TEST': {'MIRROR': 'a1-primary'}},
+    'a1-replica-2': {'ENGINE': 'django.db.backends.sqlite3', 'TEST': {'MIRROR': 'a1-primary'}},
     'a2-primary': {'ENGINE': 'django.db.backends.sqlite3'},
-    'a2-replica': {'ENGINE': 'django.db.backends.sqlite3'},
+    'a2-replica': {'ENGINE': 'django.db.backends.sqlite3', 'TEST': {'MIRROR': 'a2-primary'}},
     'a3': {'ENGINE': 'django.db.backends.sqlite3'},
     'b1-primary': {'ENGINE': 'django.db.backends.sqlite3'},
-    'b1-replica-1': {'ENGINE': 'django.db.backends.sqlite3'},
-    'b1-replica-2': {'ENGINE': 'django.db.backends.sqlite3'},
+    'b1-replica-1': {'ENGINE': 'django.db.backends.sqlite3', 'TEST': {'MIRROR': 'b1-primary'}},
+    'b1-replica-2': {'ENGINE': 'django.db.backends.sqlite3', 'TEST': {'MIRROR': 'b1-primary'}},
     'b2-primary': {'ENGINE': 'django.db.backends.sqlite3'},
-    'b2-replica': {'ENGINE': 'django.db.backends.sqlite3'},
+    'b2-replica': {'ENGINE': 'django.db.backends.sqlite3', 'TEST': {'MIRROR': 'b2-primary'}},
     'b3': {'ENGINE': 'django.db.backends.sqlite3'},
 }
 DATABASE_ROUTERS = (

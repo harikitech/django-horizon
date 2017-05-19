@@ -15,13 +15,13 @@ class HorizontalRouter(object):
         if not horizontal_group:
             return
 
-        instance = hints.get('instance', None)
-        if instance:
-            if not hasattr(instance, '_horizontal_database_index'):
-                return
-            return instance._horizontal_database_index
-
         horizontal_key = hints.get('horizontal_key', None)
+        if not horizontal_key:
+            instance = hints.get('instance', None)
+            if instance:
+                # From foreign field
+                horizontal_key = instance.pk
+
         if not horizontal_key:
             raise IntegrityError("Missing 'horizontal_key'")
         return model._get_or_create_horizontal_index(horizontal_key)

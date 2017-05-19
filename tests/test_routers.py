@@ -2,7 +2,6 @@
 
 from __future__ import absolute_import, unicode_literals
 
-from unittest import skip
 from mock import patch
 
 from django.contrib.auth import get_user_model
@@ -12,11 +11,14 @@ from horizon.routers import HorizontalRouter
 from .models import AnotherGroup, HorizonChild, HorizonParent, HorizontalMetadata
 
 
-user_modle = get_user_model()
+user_model = get_user_model()
 
 
 class HorizontalRouterMigrationTestCase(TestCase):
+    multi_db = True
+
     def setUp(self):
+        super(HorizontalRouterMigrationTestCase, self).setUp()
         self.router = HorizontalRouter()
 
     def test_get_horizontal_group(self):
@@ -34,7 +36,7 @@ class HorizontalRouterMigrationTestCase(TestCase):
         )
 
     def test_get_horizontal_group_for_default(self):
-        self.assertIsNone(self.router._get_horizontal_group(user_modle))
+        self.assertIsNone(self.router._get_horizontal_group(user_model))
 
     def test_allow_migrate(self):
         for expected_database in ('a1-primary', 'a1-replica-1', 'a1-replica-2', 'a2-primary',
@@ -74,8 +76,8 @@ class HorizontalRouterMigrationTestCase(TestCase):
             )
 
         self.assertIsNone(
-            self.router.allow_migrate('a1-primary', user_modle._meta.app_label, user_modle.__name__,
-                                      model=user_modle),
+            self.router.allow_migrate('a1-primary', user_model._meta.app_label, user_model.__name__,
+                                      model=user_model),
             "Not configured for horizontal database groups",
         )
         self.assertIsNone(
@@ -93,7 +95,7 @@ class HorizontalRouterMigrationTestCase(TestCase):
 
         self.assertIsNone(
             self.router.allow_migrate(
-                'a1-primary', user_modle._meta.app_label, 'User', model=user_modle),
+                'a1-primary', user_model._meta.app_label, 'User', model=user_model),
             "Not configured for horizontal database groups",
         )
         self.assertIsNone(
@@ -104,10 +106,13 @@ class HorizontalRouterMigrationTestCase(TestCase):
 
 
 class HorizontalRouterRelationTestCase(TestCase):
+    multi_db = True
+
     def setUp(self):
+        super(HorizontalRouterRelationTestCase, self).setUp()
         self.router = HorizontalRouter()
-        self.user_a = user_modle.objects.create_user('spam')
-        self.user_b = user_modle.objects.create_user('egg')
+        self.user_a = user_model.objects.create_user('spam')
+        self.user_b = user_model.objects.create_user('egg')
 
     def test_allow_relation_in_same_database(self):
         HorizontalMetadata.objects.create(group='a', key=self.user_a.id, index=1)
@@ -134,11 +139,14 @@ class HorizontalRouterRelationTestCase(TestCase):
 
 
 class HorizontalRouterReadWriteTestCase(TestCase):
+    multi_db = True
+
     def setUp(self):
+        super(HorizontalRouterReadWriteTestCase, self).setUp()
         self.router = HorizontalRouter()
-        self.user_a = user_modle.objects.create_user('spam')
-        self.user_b = user_modle.objects.create_user('egg')
-        self.user_c = user_modle.objects.create_user('sushi')
+        self.user_a = user_model.objects.create_user('spam')
+        self.user_b = user_model.objects.create_user('egg')
+        self.user_c = user_model.objects.create_user('sushi')
         HorizontalMetadata.objects.create(group='a', key=self.user_a.id, index=1)
         HorizontalMetadata.objects.create(group='a', key=self.user_b.id, index=2)
         HorizontalMetadata.objects.create(group='a', key=self.user_c.id, index=3)
@@ -179,9 +187,9 @@ class HorizontalRouterReadWriteTestCase(TestCase):
 
     def test_db_for_write_other_databases(self):
         with patch.object(HorizontalRouter, 'db_for_write', wraps=self.router.db_for_write) as mock_db_for_write:
-            new_user = user_modle.objects.create_user('pizza')
-            mock_db_for_write.assert_any_call(user_modle, instance=new_user)
-            self.assertIsNone(self.router.db_for_write(user_modle, instance=new_user))
+            new_user = user_model.objects.create_user('pizza')
+            mock_db_for_write.assert_any_call(user_model, instance=new_user)
+            self.assertIsNone(self.router.db_for_write(user_model, instance=new_user))
 
     def test_db_for_read(self):
         with patch.object(HorizontalRouter, 'db_for_read', wraps=self.router.db_for_read) as mock_db_for_read:
@@ -219,6 +227,6 @@ class HorizontalRouterReadWriteTestCase(TestCase):
 
     def test_db_for_read_other_databases(self):
         with patch.object(HorizontalRouter, 'db_for_read', wraps=self.router.db_for_read) as mock_db_for_read:
-            list(user_modle.objects.filter())
-            mock_db_for_read.assert_any_call(user_modle)
-            self.assertIsNone(self.router.db_for_read(user_modle))
+            list(user_model.objects.filter())
+            mock_db_for_read.assert_any_call(user_model)
+            self.assertIsNone(self.router.db_for_read(user_model))

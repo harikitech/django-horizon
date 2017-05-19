@@ -8,11 +8,16 @@ from django.test import TestCase
 from .models import HorizonChild, HorizonParent, AnotherGroup
 
 
+user_model = get_user_model()
+
+
 class HorizontalModelTestCase(TestCase):
+    multi_db = True
+
     def setUp(self):
-        user_modle = get_user_model()
-        self.user_a = user_modle.objects.create_user('spam')
-        self.user_b = user_modle.objects.create_user('egg')
+        super(HorizontalModelTestCase, self).setUp()
+        self.user_a = user_model.objects.create_user('spam')
+        self.user_b = user_model.objects.create_user('egg')
 
     def test_set_meta(self):
         self.assertEqual('a', HorizonParent._meta.horizontal_group)
