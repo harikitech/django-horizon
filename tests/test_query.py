@@ -135,4 +135,101 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
         self.assertEqual(a1.pk, a2.pk)
 
     def test_update_or_create(self):
-        pass
+        # Create
+        with patch.object(
+            HorizontalQuerySet,
+            '_get_horizontal_key_from_lookup_value',
+            wraps=self.queryset._get_horizontal_key_from_lookup_value,
+        ) as mock_get_horizontal_key_from_lookup_value:
+            a1, created = AnotherGroup.objects.update_or_create(user=self.user, egg='1st',
+                                                                defaults={'sushi': 'tsuna'})
+            mock_get_horizontal_key_from_lookup_value.assert_any_call(self.user)
+            self.assertEqual(
+                self.user.id,
+                self.queryset._get_horizontal_key_from_lookup_value(self.user),
+            )
+            self.assertTrue(created)
+            self.assertEqual('tsuna', a1.sushi)
+
+        # Update
+        with patch.object(
+            HorizontalQuerySet,
+            '_get_horizontal_key_from_lookup_value',
+            wraps=self.queryset._get_horizontal_key_from_lookup_value,
+        ) as mock_get_horizontal_key_from_lookup_value:
+            a2, created = AnotherGroup.objects.update_or_create(user=self.user, egg='1st',
+                                                                defaults={'sushi': 'pony'})
+            mock_get_horizontal_key_from_lookup_value.assert_any_call(self.user)
+            self.assertEqual(
+                self.user.id,
+                self.queryset._get_horizontal_key_from_lookup_value(self.user),
+            )
+            self.assertFalse(created)
+            self.assertEqual('tsuna', a1.sushi)
+        self.assertEqual(a1.pk, a2.pk)
+
+    def test_update_or_create_by_id(self):
+        # Create
+        with patch.object(
+            HorizontalQuerySet,
+            '_get_horizontal_key_from_lookup_value',
+            wraps=self.queryset._get_horizontal_key_from_lookup_value,
+        ) as mock_get_horizontal_key_from_lookup_value:
+            a1, created = AnotherGroup.objects.update_or_create(user_id=self.user.id, egg='1st',
+                                                                defaults={'sushi': 'tsuna'})
+            mock_get_horizontal_key_from_lookup_value.assert_any_call(self.user.id)
+            self.assertEqual(
+                self.user.id,
+                self.queryset._get_horizontal_key_from_lookup_value(self.user.id),
+            )
+            self.assertTrue(created)
+            self.assertEqual('tsuna', a1.sushi)
+
+        # Update
+        with patch.object(
+            HorizontalQuerySet,
+            '_get_horizontal_key_from_lookup_value',
+            wraps=self.queryset._get_horizontal_key_from_lookup_value,
+        ) as mock_get_horizontal_key_from_lookup_value:
+            a2, created = AnotherGroup.objects.update_or_create(user_id=self.user.id, egg='1st',
+                                                                defaults={'sushi': 'pony'})
+            mock_get_horizontal_key_from_lookup_value.assert_any_call(self.user.id)
+            self.assertEqual(
+                self.user.id,
+                self.queryset._get_horizontal_key_from_lookup_value(self.user.id),
+            )
+            self.assertFalse(created)
+            self.assertEqual('tsuna', a1.sushi)
+        self.assertEqual(a1.pk, a2.pk)
+
+    def test_filter(self):
+        HorizonParent.objects.create(user=self.user, spam='1st')
+        HorizonParent.objects.create(user=self.user, spam='2nd')
+        with patch.object(
+            HorizontalQuerySet,
+            '_get_horizontal_key_from_lookup_value',
+            wraps=self.queryset._get_horizontal_key_from_lookup_value,
+        ) as mock_get_horizontal_key_from_lookup_value:
+            q = HorizonParent.objects.filter(user=self.user)
+            mock_get_horizontal_key_from_lookup_value.assert_called_once_with(self.user)
+            self.assertEqual(
+                self.user.id,
+                self.queryset._get_horizontal_key_from_lookup_value(self.user),
+            )
+            self.assertEqual(2, q.count())
+
+    def test_filter_by_id(self):
+        HorizonParent.objects.create(user=self.user, spam='1st')
+        HorizonParent.objects.create(user=self.user, spam='2nd')
+        with patch.object(
+            HorizontalQuerySet,
+            '_get_horizontal_key_from_lookup_value',
+            wraps=self.queryset._get_horizontal_key_from_lookup_value,
+        ) as mock_get_horizontal_key_from_lookup_value:
+            q = HorizonParent.objects.filter(user_id=self.user.id)
+            mock_get_horizontal_key_from_lookup_value.assert_called_once_with(self.user.id)
+            self.assertEqual(
+                self.user.id,
+                self.queryset._get_horizontal_key_from_lookup_value(self.user.id),
+            )
+            self.assertEqual(2, q.count())
