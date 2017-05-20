@@ -10,4 +10,7 @@ Development Lead
 Contributors
 ------------
 
-None yet. Why not be the first?
+* None yet. Why not be the first?
+* `We are hiring`_
+
+.. _`We are hiring`: https://www.wantedly.com/companies/uncovertruth/

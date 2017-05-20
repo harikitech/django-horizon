@@ -1,5 +1,5 @@
 Welcome to Django Horizon's documentation!
-======================================
+==========================================
 
 Contents:
 
@@ -10,7 +10,8 @@ Contents:
    installation
    usage
    contributing
-   authorshistory
+   authors
+   history
 
 Indices and tables
 ==================
