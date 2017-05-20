@@ -5,6 +5,7 @@ from __future__ import absolute_import, unicode_literals
 from mock import patch
 
 from django.contrib.auth import get_user_model
+from django.db.utils import IntegrityError
 
 from horizon.query import HorizontalQuerySet
 from .base import HorizontalBaseTestCase
@@ -233,3 +234,7 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
                 self.queryset._get_horizontal_key_from_lookup_value(self.user.id),
             )
             self.assertEqual(2, q.count())
+
+    def test_filter_without_shard_key(self):
+        with self.assertRaises(IntegrityError):
+            list(HorizonParent.objects.all())

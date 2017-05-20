@@ -3,6 +3,7 @@
 from __future__ import absolute_import, unicode_literals
 
 import random
+import uuid
 
 from django.core import checks
 from django.core.exceptions import FieldDoesNotExist
@@ -35,6 +36,7 @@ class AbstractHorizontalMetadata(models.Model):
 
 
 class AbstractHorizontalModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     objects = HorizontalManager()
 
     @classmethod
