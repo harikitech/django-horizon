@@ -55,9 +55,10 @@ matrix:
   - env: TOX_ENV=pypy3-dj111
   - env: TOX_ENV=py27-dj18  # SQLite is too old
   - env: TOX_ENV=py27-dj19  # SQLite is too old
-  - env: TOX_ENV=py27-dj10  # SQLite is too old
+  - env: TOX_ENV=py27-dj110  # SQLite is too old
   - env: TOX_ENV=py27-dj111  # SQLite is too old
   - env: TOX_ENV=pypy-dj111  # SQLite is too old
+  - env: TOX_ENV=py33-dj18  # SQLite is too old
 addons:
   apt:
     sources:
