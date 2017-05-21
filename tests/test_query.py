@@ -2,7 +2,10 @@
 
 from __future__ import absolute_import, unicode_literals
 
-from unittest.mock import patch
+try:
+    from unittest.mock import patch
+except ImportError:
+    from mock import patch
 
 from django.contrib.auth import get_user_model
 from django.db.utils import IntegrityError
