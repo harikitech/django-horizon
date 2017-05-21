@@ -41,6 +41,13 @@ class HorizontalModelTestCase(HorizontalBaseTestCase):
     def test_get_or_create_expected_database(self):
         HorizontalMetadata.objects.create(group='a', key=self.user_a.id, index=1)
         p = HorizonParent.objects.create(user=self.user_a, spam='1st')
+
         self.assertTrue(HorizonParent.objects.using('a1-primary').get(pk=p.pk))
         self.assertTrue(HorizonParent.objects.using('a1-replica-1').get(pk=p.pk))
         self.assertTrue(HorizonParent.objects.using('a1-replica-2').get(pk=p.pk))
+
+        with self.assertRaises(HorizonParent.DoesNotExist):
+            self.assertTrue(HorizonParent.objects.using('a2-primary').get(pk=p.pk))
+
+        with self.assertRaises(HorizonParent.DoesNotExist):
+            self.assertTrue(HorizonParent.objects.using('a3').get(pk=p.pk))

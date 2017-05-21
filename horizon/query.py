@@ -8,8 +8,8 @@ from django.db.utils import IntegrityError
 
 
 class HorizontalQuerySet(QuerySet):
-    def __init__(self, **kwargs):
-        super(HorizontalQuerySet, self).__init__(**kwargs)
+    def __init__(self, model=None, **kwargs):
+        super(HorizontalQuerySet, self).__init__(model=model, **kwargs)
         self._horizontal_key = None
 
     @classmethod

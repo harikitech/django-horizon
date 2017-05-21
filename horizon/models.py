@@ -37,6 +37,7 @@ class AbstractHorizontalMetadata(models.Model):
 
 class AbstractHorizontalModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
     objects = HorizontalManager()
 
     @classmethod

@@ -9,63 +9,96 @@ INSTALLED_APPS = [
 
 
 DATABASES = {
-    'a1-primary': {
-        'NAME': ':memory:',
+    'default': {
+        'NAME': 'default',
         'ENGINE': 'django.db.backends.sqlite3',
+        'TEST': {
+            'NAME': 'file:memorydb_default?mode=memory&cache=shared',
+        },
+    },
+    'a1-primary': {
+        'NAME': 'a1-primary',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'TEST': {
+            'NAME': 'file:memorydb_a1-primary?mode=memory&cache=shared',
+        },
     },
     'a1-replica-1': {
-        'NAME': ':memory:',
+        'NAME': 'a1-replica-1',
         'ENGINE': 'django.db.backends.sqlite3',
-        'TEST': {'MIRROR': 'a1-primary'},
+        'TEST': {
+            'MIRROR': 'a1-primary',
+        },
     },
     'a1-replica-2': {
-        'NAME': ':memory:',
+        'NAME': 'a1-replica-2',
         'ENGINE': 'django.db.backends.sqlite3',
-        'TEST': {'MIRROR': 'a1-primary'},
+        'TEST': {
+            'MIRROR': 'a1-primary',
+        },
     },
     'a2-primary': {
-        'NAME': ':memory:',
+        'NAME': 'a2-primary',
         'ENGINE': 'django.db.backends.sqlite3',
+        'TEST': {
+            'NAME': 'file:memorydb_a2-primary?mode=memory&cache=shared',
+        },
     },
     'a2-replica': {
-        'NAME': ':memory:',
+        'NAME': 'a2-replica',
         'ENGINE': 'django.db.backends.sqlite3',
-        'TEST': {'MIRROR': 'a2-primary'},
+        'TEST': {
+            'MIRROR': 'a2-primary',
+        },
     },
     'a3': {
-        'NAME': ':memory:',
+        'NAME': 'a3',
         'ENGINE': 'django.db.backends.sqlite3',
+        'TEST': {
+            'NAME': 'file:memorydb_a3?mode=memory&cache=shared',
+        },
     },
     'b1-primary': {
-        'NAME': ':memory:',
+        'NAME': 'b1-primary',
         'ENGINE': 'django.db.backends.sqlite3',
+        'TEST': {
+            'NAME': 'file:memorydb_b1-primary?mode=memory&cache=shared',
+        },
     },
     'b1-replica-1': {
-        'NAME': ':memory:',
+        'NAME': 'b1-replica-1',
         'ENGINE': 'django.db.backends.sqlite3',
-        'TEST': {'MIRROR': 'b1-primary'},
+        'TEST': {
+            'MIRROR': 'b1-primary',
+        },
     },
     'b1-replica-2': {
-        'NAME': ':memory:',
+        'NAME': 'b1-replica-2',
         'ENGINE': 'django.db.backends.sqlite3',
-        'TEST': {'MIRROR': 'b1-primary'},
+        'TEST': {
+            'MIRROR': 'b1-primary',
+        },
     },
     'b2-primary': {
-        'NAME': ':memory:',
+        'NAME': 'b2-primary',
         'ENGINE': 'django.db.backends.sqlite3',
+        'TEST': {
+            'NAME': 'file:memorydb_b2-primary?mode=memory&cache=shared',
+        },
     },
     'b2-replica': {
-        'NAME': ':memory:',
+        'NAME': 'b2-replica',
         'ENGINE': 'django.db.backends.sqlite3',
-        'TEST': {'MIRROR': 'b2-primary'},
+        'TEST': {
+            'MIRROR': 'b2-primary',
+        },
     },
     'b3': {
-        'NAME': ':memory:',
+        'NAME': 'b3',
         'ENGINE': 'django.db.backends.sqlite3',
-    },
-    'default': {
-        'NAME': ':memory:',
-        'ENGINE': 'django.db.backends.sqlite3',
+        'TEST': {
+            'NAME': 'file:memorydb_b3?mode=memory&cache=shared',
+        },
     },
 }
 DATABASE_ROUTERS = (
