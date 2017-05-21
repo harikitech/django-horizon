@@ -24,8 +24,8 @@ options.DEFAULT_NAMES += OPTION_NAMES
 
 
 class AbstractHorizontalMetadata(models.Model):
-    group = models.CharField(max_length=8)
-    key = models.CharField(max_length=120)
+    group = models.CharField(max_length=15)
+    key = models.CharField(max_length=32)
     index = models.PositiveSmallIntegerField()
 
     class Meta(object):

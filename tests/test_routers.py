@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model
 
 from horizon.routers import HorizontalRouter
 from .base import HorizontalBaseTestCase
-from .models import AnotherGroup, HorizonChild, HorizonParent, HorizontalMetadata
+from .models import AnotherGroup, HorizonChild, HorizontalMetadata, HorizonParent
 
 
 user_model = get_user_model()

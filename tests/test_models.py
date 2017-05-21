@@ -5,7 +5,7 @@ from __future__ import absolute_import, unicode_literals
 from django.contrib.auth import get_user_model
 
 from .base import HorizontalBaseTestCase
-from .models import HorizonChild, HorizonParent, AnotherGroup
+from .models import HorizonChild, HorizontalMetadata, HorizonParent, AnotherGroup
 
 
 user_model = get_user_model()
@@ -35,4 +35,12 @@ class HorizontalModelTestCase(HorizontalBaseTestCase):
         self.assertEqual(p._horizontal_database_index, c._horizontal_database_index)
 
     def test_filter(self):
-        list(HorizonParent.objects.filter(user=self.user_a))
+        HorizonParent.objects.create(user=self.user_a, spam='1st')
+        self.assertEqual(1, HorizonParent.objects.filter(user=self.user_a).count())
+
+    def test_get_or_create_expected_database(self):
+        HorizontalMetadata.objects.create(group='a', key=self.user_a.id, index=1)
+        p = HorizonParent.objects.create(user=self.user_a, spam='1st')
+        self.assertTrue(HorizonParent.objects.using('a1-primary').get(pk=p.pk))
+        self.assertTrue(HorizonParent.objects.using('a1-replica-1').get(pk=p.pk))
+        self.assertTrue(HorizonParent.objects.using('a1-replica-2').get(pk=p.pk))
