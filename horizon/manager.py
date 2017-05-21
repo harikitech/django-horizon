@@ -7,14 +7,13 @@ from django.db.models.manager import Manager
 from .query import HorizontalQuerySet
 
 
-class HorizontalManager(Manager):
+class HorizontalManager(Manager.from_queryset(HorizontalQuerySet)):
     use_for_related_fields = True
     use_in_migrations = True
+    silence_use_for_related_fields_deprecation = True  # For Django<1.10
+
+    _queryset_class = HorizontalQuerySet
 
     def __init__(self):
         super(HorizontalManager, self).__init__()
         self.name = 'horizontal'
-
-    def get_queryset(self):
-        """For old django"""
-        return HorizontalQuerySet(model=self.model, using=self._db, hints=self._hints)

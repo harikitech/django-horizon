@@ -19,6 +19,8 @@ from .utils import get_metadata_model
 OPTION_NAMES = (
     'horizontal_group',
     'horizontal_key',
+    'default_manager_name',  # For Django<1.10
+    'base_manager_name',  # For Django<1.10
 )
 options.DEFAULT_NAMES += OPTION_NAMES
 
@@ -130,3 +132,5 @@ class AbstractHorizontalModel(models.Model):
         abstract = True
         horizontal_group = None
         horizontal_key = None
+        default_manager_name = 'horizontal'
+        base_manager_name = 'horizontal'
