@@ -1,4 +1,5 @@
 * Django Horizon version:
+* Django version:
 * Python version:
 * Operating System:
 
