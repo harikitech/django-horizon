@@ -8,3 +8,4 @@ pymemcache
 readme_renderer
 Sphinx
 tox
+twine
