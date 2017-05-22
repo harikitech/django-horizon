@@ -125,7 +125,11 @@ Metadata store
     class HorizontalMetadata(AbstractHorizontalMetadata):
         pass
 
-In the example, metadata store keep user's pk and that index of horizontal database (``1``, ``2`` or ``3``).
+In the example, metadata store save followings.
+
+- ``group``: Group name for horizontal partitioning.
+- ``key``: Key which using for which database choosen.
+- ``index``: Choosed database index in horizontal database groups for key.
 
 Sharded model
 """""""""""""
@@ -146,7 +150,7 @@ Sharded model
 
         class Meta(object):
             horizontal_group = 'group1'  # Group name
-            horizontal_key = 'user'  # Group key
+            horizontal_key = 'user'  # Field name to use group key
 
 In many cases use UUIDField_ field for ``id``.
 The ``AbstractHorizontalModel`` uses UUIDField_ as a them id field in default.
@@ -170,13 +174,10 @@ Using a model
     # Get by foreign id
     SomeLargeModel.objects.filter(uses_id=user.id)
 
-    # django.db.utils.IntegrityError occured when not specify horizontal key field to filter
-    SomeLargeModel.objects.all()
-
 Model limitations
 """""""""""""""""
 
-* django.db.utils.IntegrityError occured when not specify horizontal key field to filter
+* ``django.db.utils.IntegrityError`` occured when not specify horizontal key field to filter
 
     .. code-block:: python
 
@@ -186,4 +187,4 @@ Model limitations
 
     .. code-block:: python
 
-        list(self.user.somelargemodel_set.all())
+        list(user.somelargemodel_set.all())
