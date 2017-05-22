@@ -25,7 +25,9 @@ Simple database sharding (horizontal partitioning) library for Django applicatio
 
 * Free software: MIT license
 * Documentation: https://django-horizon.readthedocs.io.
+* Inspired by django-sharding_. Thank you so much for your cool solution :)
 
+.. _django-sharding: https://github.com/JBKahn/django-sharding
 
 Features
 --------
@@ -96,8 +98,8 @@ Database router
         ...
     )
 
-Example
-^^^^^^^
+Example models
+^^^^^^^^^^^^^^
 
 Horizontal partitioning by user
 
@@ -120,6 +122,7 @@ Shard database
 
     from django.conf import settings
 
+    from horizon.manager import HorizontalManager  # For Django<1.10
     from horizon.models AbstractHorizontalModel
 
 
@@ -127,20 +130,46 @@ Shard database
         user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
         ...
 
+        objects = HorizontalManager()  # For Django<1.10
+
         class Meta(object):
             horizontal_group = 'group1'  # Group name
             horizontal_key = 'user'  # Group key
 
 In many cases use UUIDField_ field for `id`.
+The `AbstractHorizontalModel` uses UUIDField_ as a them id field in default.
 
 .. _UUIDField: https://docs.djangoproject.com/en/dev/ref/models/fields/#uuidfield
 
-Credits
--------
+Using model
+"""""""""""
 
-* This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
-* Inspired by django-sharding_.
+.. code-block:: python
 
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
-.. _django-sharding: https://github.com/JBKahn/django-sharding
+    from django.contrib.auth import get_user_model
+
+
+    user_model = get_user_model()
+    user = user_model.objects.get(pk=1)
+
+    # Get by foreign instance
+    SomeLargeModel.objects.filter(uses=user)
+
+    # Get by foreign id
+    SomeLargeModel.objects.filter(uses_id=user.id)
+
+    # django.db.utils.IntegrityError occured when not specify horizontal key field to filter
+    SomeLargeModel.objects.all()
+
+Model limitation
+""""""""""""""""
+
+.. code-block:: python
+
+    # django.db.utils.IntegrityError occured when not specify horizontal key field to filter
+    SomeLargeModel.objects.all()
+
+.. code-block:: python
+
+    # Cannot lookup by foreign key field, cause there are other (like `default`) DBs
+    list(self.user.horizonparent_set.all())
