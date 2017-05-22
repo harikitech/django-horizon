@@ -59,7 +59,7 @@ Usage
 Setup
 ^^^^^
 
-Add database router database configuration in your `settings.py`:
+Add database router configuration in your `settings.py`:
 
 Horizontal database groups and metadata store
 """""""""""""""""""""""""""""""""""""""""""""
@@ -123,7 +123,7 @@ Shard database
     from django.conf import settings
 
     from horizon.manager import HorizontalManager  # For Django<1.10
-    from horizon.models AbstractHorizontalModel
+    from horizon.models import AbstractHorizontalModel
 
 
     class SomeLargeModel(AbstractHorizontalModel):
@@ -172,4 +172,4 @@ Model limitation
 .. code-block:: python
 
     # Cannot lookup by foreign key field, cause there are other (like `default`) DBs
-    list(self.user.horizonparent_set.all())
+    list(self.user.somelargemodel_set.all())
