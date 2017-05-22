@@ -38,12 +38,16 @@ setup(
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Environment :: Web Environment',
+        'Framework :: Django :: 1.8',
+        'Framework :: Django :: 1.9',
         'Framework :: Django :: 1.10',
         'Framework :: Django :: 1.11',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Operating System :: OS Independent',
+        'Programming Language :: Python :: 2',  # Allow failure because SQLite is too old
+        'Programming Language :: Python :: 2.7',  # Allow failure because SQLite is too old
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',

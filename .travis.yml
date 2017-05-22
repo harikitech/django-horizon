@@ -5,6 +5,22 @@ cache: pip
 matrix:
   fast_finish: true
   include:
+  - python: 2.7
+    env: TOX_ENV=py27-dj18
+  - python: 3.3
+    env: TOX_ENV=py33-dj18
+  - python: 3.4
+    env: TOX_ENV=py34-dj18
+  - python: 3.5
+    env: TOX_ENV=py34-dj18
+  - python: 2.7
+    env: TOX_ENV=py27-dj19
+  - python: 3.4
+    env: TOX_ENV=py34-dj19
+  - python: 3.5
+    env: TOX_ENV=py35-dj19
+  - python: 2.7
+    env: TOX_ENV=py27-dj110
   - python: 3.4
     env: TOX_ENV=py34-dj110
   - python: 3.5
@@ -37,8 +53,12 @@ matrix:
   - env: TOX_ENV=py35-djdev
   - env: TOX_ENV=py36-djdev
   - env: TOX_ENV=pypy3-dj111
+  - env: TOX_ENV=py27-dj18  # SQLite is too old
+  - env: TOX_ENV=py27-dj19  # SQLite is too old
+  - env: TOX_ENV=py27-dj110  # SQLite is too old
   - env: TOX_ENV=py27-dj111  # SQLite is too old
   - env: TOX_ENV=pypy-dj111  # SQLite is too old
+  - env: TOX_ENV=py33-dj18  # SQLite is too old
 addons:
   apt:
     sources:
