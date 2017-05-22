@@ -11,11 +11,12 @@ include setup.py
 include runtests.py
 include Makefile
 
-exclude .travis.yml
-exclude tox.ini
-exclude requirements.txt
 exclude .editorconfig
+exclude .pyup.yml
+exclude .travis.yml
+exclude requirements.txt
 exclude runmakemigrations.py
+exclude tox.ini
 
 global-exclude __pycache__
 global-exclude *.py[co]
