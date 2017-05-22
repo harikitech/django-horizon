@@ -1,0 +1,11 @@
+check-manifest
+coverage
+Django>=1.8
+flake8
+isort
+mock
+pymemcache
+readme_renderer
+Sphinx
+tox
+twine

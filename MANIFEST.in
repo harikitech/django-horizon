@@ -1,0 +1,26 @@
+graft horizon
+graft docs
+
+include AUTHORS.rst
+include CONTRIBUTING.rst
+include HISTORY.rst
+include LICENSE
+include README.rst
+include setup.cfg
+include setup.py
+include runtests.py
+include Makefile
+
+exclude .travis.yml
+exclude tox.ini
+exclude requirements.txt
+exclude .editorconfig
+exclude runmakemigrations.py
+
+global-exclude __pycache__
+global-exclude *.py[co]
+global-exclude *.cfg
+
+prune .github
+prune docs/_build
+prune tests
