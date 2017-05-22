@@ -61,8 +61,8 @@ Setup
 
 Add database router configuration in your `settings.py`:
 
-Horizontal database groups and metadata store
-"""""""""""""""""""""""""""""""""""""""""""""
+Horizontal database groups and a metadata store
+"""""""""""""""""""""""""""""""""""""""""""""""
 
 .. code-block:: python
 
@@ -115,8 +115,8 @@ Metadata store
 
 In the example, metadata store keep user's pk and that index of horizontal database (`1`, `2` or `3`).
 
-Shard database
-""""""""""""""
+Sharded model
+"""""""""""""
 
 .. code-block:: python
 
@@ -141,8 +141,8 @@ The `AbstractHorizontalModel` uses UUIDField_ as a them id field in default.
 
 .. _UUIDField: https://docs.djangoproject.com/en/dev/ref/models/fields/#uuidfield
 
-Using model
-"""""""""""
+Using a model
+"""""""""""""
 
 .. code-block:: python
 
@@ -161,15 +161,17 @@ Using model
     # django.db.utils.IntegrityError occured when not specify horizontal key field to filter
     SomeLargeModel.objects.all()
 
-Model limitation
-""""""""""""""""
+Model limitations
+"""""""""""""""""
 
-.. code-block:: python
+* django.db.utils.IntegrityError occured when not specify horizontal key field to filter
 
-    # django.db.utils.IntegrityError occured when not specify horizontal key field to filter
-    SomeLargeModel.objects.all()
+    .. code-block:: python
 
-.. code-block:: python
+        SomeLargeModel.objects.all()
 
-    # Cannot lookup by foreign key field, cause there are other (like `default`) DBs
-    list(self.user.somelargemodel_set.all())
+* Cannot lookup by foreign key field, cause there are other (like `default`) database
+
+    .. code-block:: python
+
+        list(self.user.somelargemodel_set.all())
