@@ -2,20 +2,27 @@
 Django Horizon
 ==============
 
+.. image:: https://travis-ci.org/uncovertruth/django-horizon.svg?branch=master
+    :target: https://travis-ci.org/uncovertruth/django-horizon
 
-.. image:: https://img.shields.io/pypi/v/django_horizon.svg
-        :target: https://pypi.python.org/pypi/django_horizon
-
-.. image:: https://img.shields.io/travis/uncovertruth/django_horizon.svg
-        :target: https://travis-ci.org/uncovertruth/django_horizon
+.. image:: https://codecov.io/gh/uncovertruth/django-horizon/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/uncovertruth/django-horizon
 
 .. image:: https://readthedocs.org/projects/django-horizon/badge/?version=latest
-        :target: https://django-horizon.readthedocs.io/en/latest/?badge=latest
-        :alt: Documentation Status
+    :target: http://django-horizon.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
 
-.. image:: https://pyup.io/repos/github/uncovertruth/django_horizon/shield.svg
-     :target: https://pyup.io/repos/github/uncovertruth/django_horizon/
-     :alt: Updates
+.. image:: https://pyup.io/repos/github/uncovertruth/django-horizon/shield.svg
+    :target: https://pyup.io/repos/github/uncovertruth/django-horizon/
+    :alt: Updates
+
+.. image:: https://pyup.io/repos/github/uncovertruth/django-horizon/python-3-shield.svg
+    :target: https://pyup.io/repos/github/uncovertruth/django-horizon/
+    :alt: Python 3
+
+.. image:: https://img.shields.io/pypi/v/django-horizon.svg
+    :target: https://pypi.python.org/pypi/django-horizon
+
 
 Purpose
 -------
@@ -28,6 +35,11 @@ Simple database sharding (horizontal partitioning) library for Django applicatio
 * Inspired by django-sharding_. Thank you so much for your cool solution :)
 
 .. _django-sharding: https://github.com/JBKahn/django-sharding
+
+
+.. image:: https://raw.githubusercontent.com/uncovertruth/django-horizon/master/docs/_static/logo.jpg
+    :alt: Logo
+
 
 Features
 --------
@@ -59,7 +71,7 @@ Usage
 Setup
 ^^^^^
 
-Add database router configuration in your `settings.py`:
+Add database router configuration in your ``settings.py``:
 
 Horizontal database groups and a metadata store
 """""""""""""""""""""""""""""""""""""""""""""""
@@ -113,7 +125,7 @@ Metadata store
     class HorizontalMetadata(AbstractHorizontalMetadata):
         pass
 
-In the example, metadata store keep user's pk and that index of horizontal database (`1`, `2` or `3`).
+In the example, metadata store keep user's pk and that index of horizontal database (``1``, ``2`` or ``3``).
 
 Sharded model
 """""""""""""
@@ -136,8 +148,8 @@ Sharded model
             horizontal_group = 'group1'  # Group name
             horizontal_key = 'user'  # Group key
 
-In many cases use UUIDField_ field for `id`.
-The `AbstractHorizontalModel` uses UUIDField_ as a them id field in default.
+In many cases use UUIDField_ field for ``id``.
+The ``AbstractHorizontalModel`` uses UUIDField_ as a them id field in default.
 
 .. _UUIDField: https://docs.djangoproject.com/en/dev/ref/models/fields/#uuidfield
 
@@ -170,7 +182,7 @@ Model limitations
 
         SomeLargeModel.objects.all()
 
-* Cannot lookup by foreign key field, cause there are other (like `default`) database
+* Cannot lookup by foreign key field, cause there are other (like ``default``) database
 
     .. code-block:: python
 

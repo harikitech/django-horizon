@@ -53,12 +53,12 @@ matrix:
   - env: TOX_ENV=py35-djdev
   - env: TOX_ENV=py36-djdev
   - env: TOX_ENV=pypy3-dj111
-  - env: TOX_ENV=py27-dj18  # SQLite is too old
-  - env: TOX_ENV=py27-dj19  # SQLite is too old
-  - env: TOX_ENV=py27-dj110  # SQLite is too old
-  - env: TOX_ENV=py27-dj111  # SQLite is too old
-  - env: TOX_ENV=pypy-dj111  # SQLite is too old
-  - env: TOX_ENV=py33-dj18  # SQLite is too old
+  - env: TOX_ENV=py27-dj18
+  - env: TOX_ENV=py27-dj19
+  - env: TOX_ENV=py27-dj110
+  - env: TOX_ENV=py27-dj111
+  - env: TOX_ENV=pypy-dj111
+  - env: TOX_ENV=py33-dj18
 addons:
   apt:
     sources:
@@ -71,3 +71,13 @@ before_script:
 - sqlite3 -version
 script:
 - tox -e "${TOX_ENV}"
+deploy:
+  provider: pypi
+  user: uncovertruth
+  password:
+    secure: vm63jxiupnzZI1A9UwiE8JOJ02/7u8sIHUdx0K4Nb9teqZew+uk4DaSSY6MXtjFtatnBocBG/9xc7Ej90suFfQzx5ouYguWvhMDnBivzSvFQ+L68PlgNQ2od09r7NidCOKMkgBDjM0wPnSjzAfaPQatc3PCHcA04BOH10+KPZdDDNQtvjiqRPcFuIZiet0yA5ZECDy4vYeZInXREikbFneKW4NH35eigtZbxxXPX1QBTP9eWPbEM9Hjy+q79/njXHSkyTvdeCjfBHj2Uqul78FVwxdZI37Q4Bl7dgnJ96ccqmHVPEkdhW2wpIcu04hvF1Yo6xVmcx6xsSK77lNh2apLJh5eaYv0jA107z0XszamUZyhMrIIXhrMeXOFOBvsc6oT+VvV7AIfJTLulmsRT49fwAPxzyjobGwqTN0vEJAtfux07WptR2e1IQvOGIzl2JMBckEB+37ecB5H50fW0F9MjxzsE99nEkM0QkKRe64UEZ45Dtgltzdg91JdDzhJMD7qJAfaUpLsBc2dXeoi9Is/QgpPJ15vA7JWmMOuV0eT0gaIHuaRHGd5SHT75jAmu3v5ygulXVIesytasoFFfICWDXP4YsPro+PNmyTd8QW+tAJkigSFt85E5fYhdTToZ4jDMGFC2+ryoxUkk84XX1Ax3Fu22QRip8XjWRRz72Uc=
+  distributions: sdist bdist_wheel
+  on:
+    tags: true
+    repo: uncovertruth/django-horizon
+    condition: $TOX_ENV = py36-dj111
