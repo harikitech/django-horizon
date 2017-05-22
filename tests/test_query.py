@@ -238,6 +238,11 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
             )
             self.assertEqual(2, q.count())
 
+    def test_raise_value_error_when_lookup_from_foreign(self):
+        HorizonParent.objects.create(user=self.user, spam='1st')
+        with self.assertRaises(ValueError):
+            list(self.user.horizonparent_set.all())
+
     def test_filter_without_shard_key(self):
         with self.assertRaises(IntegrityError):
             list(HorizonParent.objects.all())

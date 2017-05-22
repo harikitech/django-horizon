@@ -36,6 +36,22 @@ horizon\.routers module
     :undoc-members:
     :show-inheritance:
 
+horizon\.settings module
+------------------------
+
+.. automodule:: horizon.settings
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+horizon\.utils module
+---------------------
+
+.. automodule:: horizon.utils
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------
