@@ -12,8 +12,6 @@ class HorizontalManager(Manager.from_queryset(HorizontalQuerySet)):
     use_in_migrations = True
     silence_use_for_related_fields_deprecation = True  # For Django<1.10
 
-    _queryset_class = HorizontalQuerySet
-
     def __init__(self):
         super(HorizontalManager, self).__init__()
         self.name = 'horizontal'
