@@ -4,7 +4,7 @@ Django>=1.8
 flake8==3.3.0
 isort==4.2.5
 mock==2.0.0
-pymemcache
+pymemcache==1.4.3
 readme_renderer
 Sphinx
 tox
