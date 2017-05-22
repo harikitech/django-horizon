@@ -3,7 +3,7 @@ coverage==4.4.1
 Django>=1.8
 flake8==3.3.0
 isort==4.2.5
-mock
+mock==2.0.0
 pymemcache
 readme_renderer
 Sphinx
