@@ -14,4 +14,3 @@ class HorizontalManager(Manager.from_queryset(HorizontalQuerySet)):
 
     def __init__(self):
         super(HorizontalManager, self).__init__()
-        self.name = 'horizontal'
