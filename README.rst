@@ -128,8 +128,8 @@ Metadata store
 In the example, metadata store save followings.
 
 - ``group``: Group name for horizontal partitioning.
-- ``key``: Key which using for which database choosen.
-- ``index``: Choosed database index in horizontal database groups for key.
+- ``key``: Determines the distribution of the table's records amoung the horizontal partitioning group.
+- ``index``: Choosed database index in horizontal partitioning groups.
 
 Sharded model
 """""""""""""
