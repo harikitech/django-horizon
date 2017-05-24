@@ -29,6 +29,8 @@ def get_config():
                 member['read'] = [member['write']]
 
         if 'PICKABLES' not in horizontal_group:
-            horizontal_group['PICKABLES'] = [int(i) for i in list(horizontal_group['DATABASES'].keys())]
+            horizontal_group['PICKABLES'] = [
+                int(i) for i in list(horizontal_group['DATABASES'].keys())
+            ]
 
     return CONFIG
