@@ -20,13 +20,13 @@ class HorizontalModelTestCase(HorizontalBaseTestCase):
     def test_get_unique_checks(self):
         a = AnotherGroup.objects.create(user=self.user_a, egg='1st')
         unique_checks, date_checks = a._get_unique_checks()
-        self.assertEqual(
-            [
+        self.assertSetEqual(
+            {
                 (AnotherGroup, ('user', 'id')),  # Added horizontal key
                 (AnotherGroup, ('user', 'egg')),
                 (AnotherGroup, ('user', 'sushi')),  # Added horizontal key
-            ],
-            unique_checks,
+            },
+            set(unique_checks),
         )
 
     def test_set_meta(self):
