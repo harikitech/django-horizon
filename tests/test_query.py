@@ -8,7 +8,7 @@ except ImportError:
     from mock import patch
 
 from django.contrib.auth import get_user_model
-from django.db.utils import IntegrityError
+from django.db.utils import ProgrammingError
 
 from horizon.query import HorizontalQuerySet
 from .base import HorizontalBaseTestCase
@@ -244,5 +244,10 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
             list(self.user.horizonparent_set.all())
 
     def test_filter_without_shard_key(self):
-        with self.assertRaises(IntegrityError):
+        with self.assertRaises(ProgrammingError):
             list(HorizonParent.objects.all())
+
+    def test_clone(self):
+        qs = HorizonParent.objects.filter(user=self.user)
+        qs = qs.exclude(spam='1st')
+        list(qs)
