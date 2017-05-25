@@ -41,7 +41,7 @@ class HorizonChild(AbstractHorizontalModel):
 class AnotherGroup(AbstractHorizontalModel):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     egg = models.CharField(max_length=15)
-    sushi = models.CharField(max_length=15, null=True, default=None)
+    sushi = models.CharField(max_length=15, null=True, default=None, unique=True)
 
     objects = HorizontalManager()  # For Django<1.10
 

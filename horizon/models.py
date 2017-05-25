@@ -93,6 +93,38 @@ class AbstractHorizontalModel(models.Model):
                 ),
             ]
 
+    def _get_unique_checks(self, exclude=None):
+        if exclude is None:
+            exclude = []
+
+        fields_with_class = [(self.__class__, self._meta.local_fields)]
+        for parent_class in self._meta.get_parent_list():
+            fields_with_class.append((parent_class, parent_class._meta.local_fields))
+
+        # Exclude default field's unique check
+        unique_fields = []
+        for model_class, fields in fields_with_class:
+            for f in fields:
+                name = f.name
+                if name in exclude:
+                    continue
+                if f.unique:
+                    unique_fields.append(name)
+
+        unique_checks, date_checks = super(AbstractHorizontalModel, self)._get_unique_checks(
+            exclude=exclude + unique_fields,
+        )
+
+        # Add field's unique check with horizontal key
+        for model_class, fields in fields_with_class:
+            for f in fields:
+                name = f.name
+                if name in exclude:
+                    continue
+                if f.unique:
+                    unique_checks.append((model_class, (self._meta.horizontal_key, name,)))
+        return unique_checks, date_checks
+
     @classmethod
     def _get_horizontal_config(cls):
         return get_config()['GROUPS'][cls._meta.horizontal_group]
