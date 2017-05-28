@@ -18,6 +18,8 @@ class HorizontalRouter(object):
         horizontal_key = hints.get('horizontal_key', None)
         if not horizontal_key:
             instance = hints.get('instance', None)
+            if instance and isinstance(instance, model):
+                return instance._horizontal_database_index
             if instance:
                 # From foreign field
                 horizontal_key = instance.pk
