@@ -8,4 +8,4 @@ pymemcache==1.4.3
 readme-renderer==17.2
 Sphinx==1.6.1
 tox==2.7.0
-twine==1.9.0
+twine==1.9.1
