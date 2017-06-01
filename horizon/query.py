@@ -24,7 +24,7 @@ class HorizontalQuerySet(QuerySet):
         if self._horizontal_key is not None:
             return
 
-        key_field = self.model._meta.get_field(self.model._meta.horizontal_key)
+        key_field = self.model._meta.get_field(self.model._get_horizontal_key())
         lookup_value = kwargs.get(key_field.attname, None) or kwargs.get(key_field.name, None)
         self._horizontal_key = self._get_horizontal_key_from_lookup_value(lookup_value)
 

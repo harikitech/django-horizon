@@ -8,7 +8,8 @@ from django.db.utils import IntegrityError
 
 class HorizontalRouter(object):
     def _get_horizontal_group(self, model):
-        return getattr(model._meta, 'horizontal_group', None)
+        if hasattr(model, '_get_horizontal_group'):
+            return model._get_horizontal_group()
 
     def _get_horizontal_index(self, model, hints):
         horizontal_group = self._get_horizontal_group(model)
