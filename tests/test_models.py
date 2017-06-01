@@ -5,7 +5,7 @@ from __future__ import absolute_import, unicode_literals
 from django.contrib.auth import get_user_model
 
 from .base import HorizontalBaseTestCase
-from .models import HorizonChild, HorizontalMetadata, HorizonParent, AnotherGroup
+from .models import AnotherGroup, ConcreteModel, HorizonChild, HorizontalMetadata, HorizonParent
 
 
 user_model = get_user_model()
@@ -16,6 +16,42 @@ class HorizontalModelTestCase(HorizontalBaseTestCase):
         super(HorizontalModelTestCase, self).setUp()
         self.user_a = user_model.objects.create_user('spam')
         self.user_b = user_model.objects.create_user('egg')
+
+    def test_get_horizontal_group(self):
+        self.assertEqual(
+            'a',
+            HorizonParent._get_horizontal_group(),
+        )
+        self.assertEqual(
+            'a',
+            HorizonChild._get_horizontal_group(),
+        )
+        self.assertEqual(
+            'b',
+            AnotherGroup._get_horizontal_group(),
+        )
+        self.assertEqual(
+            'b',
+            ConcreteModel._get_horizontal_group(),
+        )
+
+    def test_get_horizontal_key(self):
+        self.assertEqual(
+            'user',
+            HorizonParent._get_horizontal_key(),
+        )
+        self.assertEqual(
+            'user',
+            HorizonChild._get_horizontal_key(),
+        )
+        self.assertEqual(
+            'user',
+            AnotherGroup._get_horizontal_key(),
+        )
+        self.assertEqual(
+            'user',
+            ConcreteModel._get_horizontal_key(),
+        )
 
     def test_get_unique_checks(self):
         a = AnotherGroup.objects.create(user=self.user_a, egg='1st')
@@ -28,14 +64,6 @@ class HorizontalModelTestCase(HorizontalBaseTestCase):
             },
             set(unique_checks),
         )
-
-    def test_set_meta(self):
-        self.assertEqual('a', HorizonParent._meta.horizontal_group)
-        self.assertEqual('user', HorizonParent._meta.horizontal_key)
-        self.assertEqual('a', HorizonChild._meta.horizontal_group)
-        self.assertEqual('user', HorizonChild._meta.horizontal_key)
-        self.assertEqual('b', AnotherGroup._meta.horizontal_group)
-        self.assertEqual('user', AnotherGroup._meta.horizontal_key)
 
     def test_horizontal_key(self):
         p = HorizonParent.objects.create(user=self.user_a, spam='1st')
@@ -63,3 +91,10 @@ class HorizontalModelTestCase(HorizontalBaseTestCase):
 
         with self.assertRaises(HorizonParent.DoesNotExist):
             self.assertTrue(HorizonParent.objects.using('a3').get(pk=p.pk))
+
+    def test_get_or_create_expected_database_for_inherited_model(self):
+        HorizontalMetadata.objects.create(group='b', key=self.user_a.id, index=1)
+        c = ConcreteModel.objects.create(user=self.user_a, pizza='pepperoni', potate='head')
+        self.assertTrue(ConcreteModel.objects.using('b1-primary').get(pk=c.pk))
+        self.assertTrue(ConcreteModel.objects.using('b1-replica-1').get(pk=c.pk))
+        self.assertTrue(ConcreteModel.objects.using('b1-replica-2').get(pk=c.pk))
