@@ -12,7 +12,7 @@ from django.db.utils import ProgrammingError
 
 from horizon.query import HorizontalQuerySet
 from .base import HorizontalBaseTestCase
-from .models import HorizonParent, AnotherGroup
+from .models import OneModel
 
 
 user_model = get_user_model()
@@ -25,13 +25,13 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
         self.queryset = HorizontalQuerySet()
 
     def test_get(self):
-        AnotherGroup.objects.create(user=self.user, egg='1st')
+        OneModel.objects.create(user=self.user, spam='1st')
         with patch.object(
             HorizontalQuerySet,
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
-            AnotherGroup.objects.get(user=self.user, egg='1st')
+            OneModel.objects.get(user=self.user, spam='1st')
             mock_get_horizontal_key_from_lookup_value.assert_any_call(self.user)
             self.assertEqual(
                 self.user.id,
@@ -39,13 +39,13 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
             )
 
     def test_get_by_id(self):
-        AnotherGroup.objects.create(user=self.user, egg='1st')
+        OneModel.objects.create(user=self.user, spam='1st')
         with patch.object(
             HorizontalQuerySet,
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
-            AnotherGroup.objects.get(user_id=self.user.id, egg='1st')
+            OneModel.objects.get(user_id=self.user.id, spam='1st')
             mock_get_horizontal_key_from_lookup_value.assert_any_call(self.user.id)
             self.assertEqual(
                 self.user.id,
@@ -58,7 +58,7 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
-            HorizonParent.objects.create(user=self.user, spam='1st')
+            OneModel.objects.create(user=self.user, spam='1st')
             mock_get_horizontal_key_from_lookup_value.assert_called_once_with(self.user)
             self.assertEqual(
                 self.user.id,
@@ -71,7 +71,7 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
-            HorizonParent.objects.create(user_id=self.user.id, spam='1st')
+            OneModel.objects.create(user_id=self.user.id, spam='1st')
             mock_get_horizontal_key_from_lookup_value.assert_called_once_with(self.user.id)
             self.assertEqual(
                 self.user.id,
@@ -85,7 +85,7 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
-            a1, created = AnotherGroup.objects.get_or_create(user=self.user, egg='1st')
+            one1, created = OneModel.objects.get_or_create(user=self.user, spam='1st')
             mock_get_horizontal_key_from_lookup_value.assert_any_call(self.user)
             self.assertEqual(
                 self.user.id,
@@ -99,14 +99,14 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
-            a2, created = AnotherGroup.objects.get_or_create(user=self.user, egg='1st')
+            one2, created = OneModel.objects.get_or_create(user=self.user, spam='1st')
             mock_get_horizontal_key_from_lookup_value.assert_any_call(self.user)
             self.assertEqual(
                 self.user.id,
                 self.queryset._get_horizontal_key_from_lookup_value(self.user),
             )
             self.assertFalse(created)
-        self.assertEqual(a1.pk, a2.pk)
+        self.assertEqual(one1.pk, one2.pk)
 
     def test_get_or_create_by_id(self):
         # Create
@@ -115,7 +115,7 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
-            a1, created = AnotherGroup.objects.get_or_create(user_id=self.user.id, egg='1st')
+            one1, created = OneModel.objects.get_or_create(user_id=self.user.id, spam='1st')
             mock_get_horizontal_key_from_lookup_value.assert_any_call(self.user.id)
             self.assertEqual(
                 self.user.id,
@@ -129,14 +129,14 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
-            a2, created = AnotherGroup.objects.get_or_create(user_id=self.user.id, egg='1st')
+            one2, created = OneModel.objects.get_or_create(user_id=self.user.id, spam='1st')
             mock_get_horizontal_key_from_lookup_value.assert_any_call(self.user.id)
             self.assertEqual(
                 self.user.id,
                 self.queryset._get_horizontal_key_from_lookup_value(self.user.id),
             )
             self.assertFalse(created)
-        self.assertEqual(a1.pk, a2.pk)
+        self.assertEqual(one1.pk, one2.pk)
 
     def test_update_or_create(self):
         # Create
@@ -145,15 +145,15 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
-            a1, created = AnotherGroup.objects.update_or_create(user=self.user, egg='1st',
-                                                                defaults={'sushi': 'tsuna'})
+            one1, created = OneModel.objects.update_or_create(user=self.user, spam='1st',
+                                                              defaults={'egg': 'scrambled'})
             mock_get_horizontal_key_from_lookup_value.assert_any_call(self.user)
             self.assertEqual(
                 self.user.id,
                 self.queryset._get_horizontal_key_from_lookup_value(self.user),
             )
             self.assertTrue(created)
-            self.assertEqual('tsuna', a1.sushi)
+            self.assertEqual('scrambled', one1.egg)
 
         # Update
         with patch.object(
@@ -161,16 +161,16 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
-            a2, created = AnotherGroup.objects.update_or_create(user=self.user, egg='1st',
-                                                                defaults={'sushi': 'pony'})
+            one2, created = OneModel.objects.update_or_create(user=self.user, spam='1st',
+                                                              defaults={'egg': 'fried'})
             mock_get_horizontal_key_from_lookup_value.assert_any_call(self.user)
             self.assertEqual(
                 self.user.id,
                 self.queryset._get_horizontal_key_from_lookup_value(self.user),
             )
             self.assertFalse(created)
-            self.assertEqual('tsuna', a1.sushi)
-        self.assertEqual(a1.pk, a2.pk)
+            self.assertEqual('scrambled', one1.egg)
+        self.assertEqual(one1.pk, one2.pk)
 
     def test_update_or_create_by_id(self):
         # Create
@@ -179,15 +179,15 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
-            a1, created = AnotherGroup.objects.update_or_create(user_id=self.user.id, egg='1st',
-                                                                defaults={'sushi': 'tsuna'})
+            one1, created = OneModel.objects.update_or_create(user_id=self.user.id, spam='1st',
+                                                              defaults={'egg': 'scrambled'})
             mock_get_horizontal_key_from_lookup_value.assert_any_call(self.user.id)
             self.assertEqual(
                 self.user.id,
                 self.queryset._get_horizontal_key_from_lookup_value(self.user.id),
             )
             self.assertTrue(created)
-            self.assertEqual('tsuna', a1.sushi)
+            self.assertEqual('scrambled', one1.egg)
 
         # Update
         with patch.object(
@@ -195,26 +195,26 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
-            a2, created = AnotherGroup.objects.update_or_create(user_id=self.user.id, egg='1st',
-                                                                defaults={'sushi': 'pony'})
+            one2, created = OneModel.objects.update_or_create(user_id=self.user.id, spam='1st',
+                                                              defaults={'egg': 'fried'})
             mock_get_horizontal_key_from_lookup_value.assert_any_call(self.user.id)
             self.assertEqual(
                 self.user.id,
                 self.queryset._get_horizontal_key_from_lookup_value(self.user.id),
             )
             self.assertFalse(created)
-            self.assertEqual('tsuna', a1.sushi)
-        self.assertEqual(a1.pk, a2.pk)
+            self.assertEqual('scrambled', one1.egg)
+        self.assertEqual(one1.pk, one2.pk)
 
     def test_filter(self):
-        HorizonParent.objects.create(user=self.user, spam='1st')
-        HorizonParent.objects.create(user=self.user, spam='2nd')
+        OneModel.objects.create(user=self.user, spam='1st')
+        OneModel.objects.create(user=self.user, spam='2nd')
         with patch.object(
             HorizontalQuerySet,
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
-            q = HorizonParent.objects.filter(user=self.user)
+            q = OneModel.objects.filter(user=self.user)
             mock_get_horizontal_key_from_lookup_value.assert_called_once_with(self.user)
             self.assertEqual(
                 self.user.id,
@@ -223,14 +223,14 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
             self.assertEqual(2, q.count())
 
     def test_filter_by_id(self):
-        HorizonParent.objects.create(user=self.user, spam='1st')
-        HorizonParent.objects.create(user=self.user, spam='2nd')
+        OneModel.objects.create(user=self.user, spam='1st')
+        OneModel.objects.create(user=self.user, spam='2nd')
         with patch.object(
             HorizontalQuerySet,
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
-            q = HorizonParent.objects.filter(user_id=self.user.id)
+            q = OneModel.objects.filter(user_id=self.user.id)
             mock_get_horizontal_key_from_lookup_value.assert_called_once_with(self.user.id)
             self.assertEqual(
                 self.user.id,
@@ -239,15 +239,15 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
             self.assertEqual(2, q.count())
 
     def test_raise_value_error_when_lookup_from_foreign(self):
-        HorizonParent.objects.create(user=self.user, spam='1st')
+        OneModel.objects.create(user=self.user, spam='1st')
         with self.assertRaises(ValueError):
-            list(self.user.horizonparent_set.all())
+            list(self.user.onemodel_set.all())
 
     def test_filter_without_shard_key(self):
         with self.assertRaises(ProgrammingError):
-            list(HorizonParent.objects.all())
+            list(OneModel.objects.all())
 
     def test_clone(self):
-        qs = HorizonParent.objects.filter(user=self.user)
+        qs = OneModel.objects.filter(user=self.user)
         qs = qs.exclude(spam='1st')
         list(qs)

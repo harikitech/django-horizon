@@ -13,8 +13,8 @@ from django.db.models import options
 from django.utils.functional import cached_property
 
 from .manager import HorizontalManager
-from .settings import get_config
 from .utils import (
+    get_config_from_model,
     get_group_from_model,
     get_key_field_name_from_model,
     get_or_create_index,
@@ -58,6 +58,7 @@ class AbstractHorizontalModel(models.Model):
             errors.extend(clash_errors)
             return errors
 
+        errors.extend(cls._check_horizontal_group(**kwargs))
         errors.extend(cls._check_horizontal_key(**kwargs))
         return errors
 
@@ -84,7 +85,7 @@ class AbstractHorizontalModel(models.Model):
 
     @classmethod
     def _check_horizontal_group(cls, **kwargs):
-        if get_group_from_model(cls) in get_config()['GROUPS']:
+        if get_config_from_model(cls):
             return []
         return [
             checks.Error(
@@ -127,15 +128,19 @@ class AbstractHorizontalModel(models.Model):
                 if name in exclude:
                     continue
                 if f.unique:
-                    unique_fields_for_exclude.append(name)
+                    unique_fields_for_exclude.append(
+                        (model_class, (name, )),
+                    )
                     unique_fields_with_horizontal_key.append(
                         (model_class, (get_key_field_name_from_model(self), name)),
                     )
-
-        unique_checks, date_checks = super(AbstractHorizontalModel, self)._get_unique_checks(
-            exclude=exclude + unique_fields_for_exclude,
-        )
-        return unique_checks + unique_fields_with_horizontal_key, date_checks
+        unique_checks, date_checks = super(AbstractHorizontalModel, self) \
+            ._get_unique_checks(exclude=exclude)
+        for unique_check in unique_checks:
+            if unique_check in unique_fields_for_exclude:
+                continue
+            unique_fields_with_horizontal_key.append(unique_check)
+        return unique_fields_with_horizontal_key, date_checks
 
     @cached_property
     def _horizontal_key(self):

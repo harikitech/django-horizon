@@ -54,6 +54,8 @@ def get_key_field_name_from_model(model):
 
 
 def get_config_from_group(horizontal_group):
+    if horizontal_group not in get_config()['GROUPS']:
+        return {}
     return get_config()['GROUPS'][horizontal_group]
 
 
