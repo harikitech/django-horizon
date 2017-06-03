@@ -143,7 +143,11 @@ Sharded model
 
 
     class SomeLargeModel(AbstractHorizontalModel):
-        user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+        user = models.ForeignKey(
+            settings.AUTH_USER_MODEL,
+            on_delete=models.DO_NOTHING,
+            db_constraint=False,  # May be using anothor database
+        )
         ...
 
         objects = HorizontalManager()  # For Django<1.10

@@ -17,7 +17,11 @@ class HorizontalMetadata(AbstractHorizontalMetadata):
 
 
 class HorizonParent(AbstractHorizontalModel):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.DO_NOTHING,
+        db_constraint=False,
+    )
     spam = models.CharField(max_length=15)
 
     objects = HorizontalManager()  # For Django<1.10
@@ -28,7 +32,11 @@ class HorizonParent(AbstractHorizontalModel):
 
 
 class HorizonChild(AbstractHorizontalModel):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.DO_NOTHING,
+        db_constraint=False,
+    )
     parent = models.ForeignKey(HorizonParent, on_delete=models.CASCADE)
 
     objects = HorizontalManager()  # For Django<1.10
@@ -39,7 +47,11 @@ class HorizonChild(AbstractHorizontalModel):
 
 
 class AnotherGroup(AbstractHorizontalModel):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.DO_NOTHING,
+        db_constraint=False,
+    )
     egg = models.CharField(max_length=15)
     sushi = models.CharField(max_length=15, null=True, default=None, unique=True)
 
@@ -54,7 +66,11 @@ class AnotherGroup(AbstractHorizontalModel):
 
 
 class AbstractModel(AbstractHorizontalModel):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.DO_NOTHING,
+        db_constraint=False,
+    )
     pizza = models.CharField(max_length=15)
 
     class Meta(object):
