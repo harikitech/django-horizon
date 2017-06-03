@@ -2,24 +2,35 @@
 
 from __future__ import absolute_import, unicode_literals
 
-import random
 import uuid
 
 from django.core import checks
 from django.core.exceptions import FieldDoesNotExist
 from django.db import models
+from django.db.migrations import state
+from django.db.migrations.operations import models as migrate_models
 from django.db.models import options
 from django.utils.functional import cached_property
 
 from .manager import HorizontalManager
 from .settings import get_config
-from .utils import get_metadata_model
+from .utils import (
+    get_group_from_model,
+    get_key_field_name_from_model,
+    get_or_create_index,
+)
 
 
-options.DEFAULT_NAMES += (
+_HORIZON_OPTIONS = (
     'horizontal_group',
     'horizontal_key',
 )
+
+
+# Monkey patch to add horizontal options in to models and database migrations
+options.DEFAULT_NAMES += _HORIZON_OPTIONS
+state.DEFAULT_NAMES += _HORIZON_OPTIONS
+migrate_models.AlterModelOptions.ALTER_OPTION_KEYS += list(_HORIZON_OPTIONS)
 
 
 class AbstractHorizontalMetadata(models.Model):
@@ -53,7 +64,7 @@ class AbstractHorizontalModel(models.Model):
     @classmethod
     def _check_horizontal_meta(cls, **kwargs):
         errors = []
-        if not cls._get_horizontal_group():
+        if not get_group_from_model(cls):
             errors.append(
                 checks.Error(
                     "'horizontal_group' not configured.",
@@ -61,7 +72,7 @@ class AbstractHorizontalModel(models.Model):
                     id='horizon.E001',
                 )
             )
-        if not cls._get_horizontal_key():
+        if not get_key_field_name_from_model(cls):
             errors.append(
                 checks.Error(
                     "'horizontal_key' not configured.",
@@ -73,12 +84,12 @@ class AbstractHorizontalModel(models.Model):
 
     @classmethod
     def _check_horizontal_group(cls, **kwargs):
-        if cls._get_horizontal_group() in get_config()['GROUPS']:
+        if get_group_from_model(cls) in get_config()['GROUPS']:
             return []
         return [
             checks.Error(
                 "'horizontal_group' '%s' does not defined in settings."
-                % cls._get_horizontal_group(),
+                % get_group_from_model(cls),
                 obj=cls,
                 id='horizon.E002',
             ),
@@ -87,13 +98,13 @@ class AbstractHorizontalModel(models.Model):
     @classmethod
     def _check_horizontal_key(cls, **kwargs):
         try:
-            cls._meta.get_field(cls._get_horizontal_key())
+            cls._meta.get_field(get_key_field_name_from_model(cls))
             return []
         except FieldDoesNotExist:
             return [
                 checks.Error(
                     "'horizontal_key' refers to the non-existent field '%s'."
-                    % cls._get_horizontal_key(),
+                    % get_key_field_name_from_model(cls),
                     obj=cls,
                     id='horizon.E003',
                 ),
@@ -118,7 +129,7 @@ class AbstractHorizontalModel(models.Model):
                 if f.unique:
                     unique_fields_for_exclude.append(name)
                     unique_fields_with_horizontal_key.append(
-                        (model_class, (self._get_horizontal_key(), name)),
+                        (model_class, (get_key_field_name_from_model(self), name)),
                     )
 
         unique_checks, date_checks = super(AbstractHorizontalModel, self)._get_unique_checks(
@@ -126,60 +137,14 @@ class AbstractHorizontalModel(models.Model):
         )
         return unique_checks + unique_fields_with_horizontal_key, date_checks
 
-    @classmethod
-    def _get_horizontal_config(cls):
-        return get_config()['GROUPS'][cls._get_horizontal_group()]
-
-    @classmethod
-    def _get_horizontal_group(cls):
-        horizontal_group = getattr(cls._meta, 'horizontal_group', None)
-        if horizontal_group:
-            return horizontal_group
-
-        for parent_class in cls._meta.get_parent_list():
-            horizontal_group = getattr(parent_class._meta, 'horizontal_group', None)
-            if horizontal_group:
-                return horizontal_group
-
-    @classmethod
-    def _get_horizontal_key(cls):
-        horizontal_key = getattr(cls._meta, 'horizontal_key', None)
-        if horizontal_key:
-            return horizontal_key
-
-        for parent_class in cls._meta.get_parent_list():
-            horizontal_key = getattr(parent_class._meta, 'horizontal_key', None)
-            if horizontal_key:
-                return horizontal_key
-
-    @classmethod
-    def _get_horizontal_db_for_read(cls, index):
-        return random.choice(cls._get_horizontal_config()['DATABASES'][index]['read'])
-
-    @classmethod
-    def _get_horizontal_db_for_write(cls, index):
-        return cls._get_horizontal_config()['DATABASES'][index]['write']
-
-    @classmethod
-    def _get_or_create_horizontal_index(cls, horizontal_key):
-        metadata_model = get_metadata_model()
-        metadata, created = metadata_model.objects.get_or_create(
-            group=cls._get_horizontal_group(),
-            key=horizontal_key,
-            defaults={
-                'index': random.choice(cls._get_horizontal_config()['PICKABLES'])
-            },
-        )
-        return metadata.index
-
     @cached_property
     def _horizontal_key(self):
-        key_field = self._meta.get_field(self._get_horizontal_key())
+        key_field = self._meta.get_field(get_key_field_name_from_model(self))
         return getattr(self, key_field.attname)
 
     @cached_property
     def _horizontal_database_index(self):
-        return self._get_or_create_horizontal_index(self._horizontal_key)
+        return get_or_create_index(self, self._horizontal_key)
 
     class Meta(object):
         abstract = True

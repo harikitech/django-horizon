@@ -22,23 +22,6 @@ class HorizontalRouterMigrationTestCase(HorizontalBaseTestCase):
         super(HorizontalRouterMigrationTestCase, self).setUp()
         self.router = HorizontalRouter()
 
-    def test_get_horizontal_group(self):
-        self.assertEqual(
-            'a',
-            self.router._get_horizontal_group(HorizonParent),
-        )
-        self.assertEqual(
-            'a',
-            self.router._get_horizontal_group(HorizonChild),
-        )
-        self.assertEqual(
-            'b',
-            self.router._get_horizontal_group(AnotherGroup),
-        )
-
-    def test_get_horizontal_group_for_default(self):
-        self.assertIsNone(self.router._get_horizontal_group(user_model))
-
     def test_allow_migrate(self):
         for expected_database in ('a1-primary', 'a1-replica-1', 'a1-replica-2', 'a2-primary',
                                   'a2-replica', 'a3'):

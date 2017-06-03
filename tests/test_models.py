@@ -17,42 +17,6 @@ class HorizontalModelTestCase(HorizontalBaseTestCase):
         self.user_a = user_model.objects.create_user('spam')
         self.user_b = user_model.objects.create_user('egg')
 
-    def test_get_horizontal_group(self):
-        self.assertEqual(
-            'a',
-            HorizonParent._get_horizontal_group(),
-        )
-        self.assertEqual(
-            'a',
-            HorizonChild._get_horizontal_group(),
-        )
-        self.assertEqual(
-            'b',
-            AnotherGroup._get_horizontal_group(),
-        )
-        self.assertEqual(
-            'b',
-            ConcreteModel._get_horizontal_group(),
-        )
-
-    def test_get_horizontal_key(self):
-        self.assertEqual(
-            'user',
-            HorizonParent._get_horizontal_key(),
-        )
-        self.assertEqual(
-            'user',
-            HorizonChild._get_horizontal_key(),
-        )
-        self.assertEqual(
-            'user',
-            AnotherGroup._get_horizontal_key(),
-        )
-        self.assertEqual(
-            'user',
-            ConcreteModel._get_horizontal_key(),
-        )
-
     def test_get_unique_checks(self):
         a = AnotherGroup.objects.create(user=self.user_a, egg='1st')
         unique_checks, date_checks = a._get_unique_checks()
