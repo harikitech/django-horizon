@@ -30,9 +30,7 @@ class HorizontalRouter(object):
             instance = hints.get('instance', None)
             if instance and isinstance(instance, model):
                 return instance._horizontal_database_index
-            if instance:
-                # From foreign field
-                horizontal_key = instance.pk
+            return None
 
         if not horizontal_key:
             raise IntegrityError("Missing 'horizontal_key'")
