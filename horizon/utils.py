@@ -87,5 +87,5 @@ def get_or_create_index(model, horizontal_key):
         },
     )
     if created:
-        logger.info("Assign new index to '%s': %s", model, metadata.index)
+        logger.info("Assign new index to '%s': %s", horizontal_group, metadata.index)
     return metadata.index
