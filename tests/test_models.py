@@ -67,6 +67,23 @@ class HorizontalModelTestCase(HorizontalBaseTestCase):
             set(unique_checks),
         )
 
+    def test_get_unique_checks_with_exclude(self):
+        concrete = ConcreteModel.objects.create(
+            user=self.user_a,
+            pizza='pepperoni',
+            potate='head',
+            coke='pe*si'
+        )
+        unique_checks, date_checks = concrete._get_unique_checks(exclude='coke')
+        self.assertSetEqual(
+            {
+                (ConcreteModel, ('user', 'id')),  # Horizontal key added
+                (ConcreteModel, ('user', 'pizza')),  # Horizontal key added
+                (ConcreteModel, ('user', 'potate')),  # Horizontal key added
+            },
+            set(unique_checks),
+        )
+
     def test_horizontal_key(self):
         one = OneModel.objects.create(user=self.user_a, spam='1st')
         self.assertEqual(self.user_a.id, one._horizontal_key)

@@ -3,8 +3,11 @@
 from __future__ import absolute_import, unicode_literals
 
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ImproperlyConfigured
+from django.test import TestCase, override_settings
 
 from horizon.utils import (
+    get_config,
     get_metadata_model,
     get_group_from_model,
     get_key_field_name_from_model,
@@ -14,7 +17,6 @@ from horizon.utils import (
     get_db_for_write_from_model_index,
     get_or_create_index,
 )
-from .base import HorizontalBaseTestCase
 from .models import (
     ConcreteModel,
     HorizontalMetadata,
@@ -28,9 +30,23 @@ from .models import (
 user_model = get_user_model()
 
 
-class UtilsTestCase(HorizontalBaseTestCase):
+class UtilsTestCase(TestCase):
     def get_metadata_model(self):
         self.assertEqual(get_metadata_model(), HorizontalMetadata)
+
+    @override_settings(HORIZONTAL_CONFIG={'METADATA_MODEL': ':innocent:'})
+    def test_get_metadata_failed_when_wrong_format(self):
+        with self.assertRaises(ImproperlyConfigured):
+            get_config.cache_clear()
+            get_metadata_model()
+        get_config.cache_clear()
+
+    @override_settings(HORIZONTAL_CONFIG={'METADATA_MODEL': 'where.IsMyModel'})
+    def test_get_metadata_failed_when_lookup_failed(self):
+        with self.assertRaises(ImproperlyConfigured):
+            get_config.cache_clear()
+            get_metadata_model()
+        get_config.cache_clear()
 
     def test_get_group_from_model(self):
         self.assertEqual('a', get_group_from_model(OneModel))

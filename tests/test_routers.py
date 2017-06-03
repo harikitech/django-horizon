@@ -136,24 +136,34 @@ class HorizontalRouterRelationTestCase(HorizontalBaseTestCase):
     def test_allow_relation_in_same_database(self):
         HorizontalMetadata.objects.create(group='a', key=self.user_a.id, index=1)
         HorizontalMetadata.objects.create(group='a', key=self.user_b.id, index=1)
-        p1 = OneModel.objects.create(user=self.user_a, spam='1st')
-        p2 = OneModel.objects.create(user=self.user_b, spam='2nd')
-        self.assertTrue(self.router.allow_relation(p1, p2))
+        one1 = OneModel.objects.create(user=self.user_a, spam='1st')
+        one2 = OneModel.objects.create(user=self.user_b, spam='2nd')
+        self.assertTrue(self.router.allow_relation(one1, one2))
 
     def test_disallow_other_database(self):
         HorizontalMetadata.objects.create(group='a', key=self.user_a.id, index=1)
         HorizontalMetadata.objects.create(group='a', key=self.user_b.id, index=2)
-        p1 = OneModel.objects.create(user=self.user_a, spam='1st')
-        p2 = OneModel.objects.create(user=self.user_b, spam='2nd')
-        self.assertIsNone(self.router.allow_relation(p1, p2), "Other shard")
+        one1 = OneModel.objects.create(user=self.user_a, spam='1st')
+        one2 = OneModel.objects.create(user=self.user_b, spam='2nd')
+        self.assertIsNone(self.router.allow_relation(one1, one2), "Other shard")
+
+    def test_disallow_other_group(self):
+        one = OneModel.objects.create(user=self.user_a, spam='meat?')
+        concrete = ConcreteModel.objects.create(
+            user=self.user_a,
+            pizza='pepperoni',
+            potate='head',
+            coke='pe*si'
+        )
+        self.assertIsNone(self.router.allow_relation(one, concrete), "Other group")
 
     def test_allow_relation_to_forein(self):
-        one = OneModel.objects.create(user=self.user_a, spam='1st')
+        one = OneModel.objects.create(user=self.user_a, spam='meat?')
         many = ManyModel.objects.create(user=self.user_a, one=one)
         self.assertTrue(self.router.allow_relation(one, many))
 
     def test_disallow_default_database(self):
-        one = OneModel.objects.create(user=self.user_a, spam='1st')
+        one = OneModel.objects.create(user=self.user_a, spam='meat?')
         self.assertFalse(self.router.allow_relation(one, self.user_a))
 
 
