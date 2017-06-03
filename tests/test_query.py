@@ -85,7 +85,7 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
-            a1, created = OneModel.objects.get_or_create(user=self.user, spam='1st')
+            one1, created = OneModel.objects.get_or_create(user=self.user, spam='1st')
             mock_get_horizontal_key_from_lookup_value.assert_any_call(self.user)
             self.assertEqual(
                 self.user.id,
@@ -99,14 +99,14 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
-            a2, created = OneModel.objects.get_or_create(user=self.user, spam='1st')
+            one2, created = OneModel.objects.get_or_create(user=self.user, spam='1st')
             mock_get_horizontal_key_from_lookup_value.assert_any_call(self.user)
             self.assertEqual(
                 self.user.id,
                 self.queryset._get_horizontal_key_from_lookup_value(self.user),
             )
             self.assertFalse(created)
-        self.assertEqual(a1.pk, a2.pk)
+        self.assertEqual(one1.pk, one2.pk)
 
     def test_get_or_create_by_id(self):
         # Create
@@ -115,7 +115,7 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
-            a1, created = OneModel.objects.get_or_create(user_id=self.user.id, spam='1st')
+            one1, created = OneModel.objects.get_or_create(user_id=self.user.id, spam='1st')
             mock_get_horizontal_key_from_lookup_value.assert_any_call(self.user.id)
             self.assertEqual(
                 self.user.id,
@@ -129,14 +129,14 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
-            a2, created = OneModel.objects.get_or_create(user_id=self.user.id, spam='1st')
+            one2, created = OneModel.objects.get_or_create(user_id=self.user.id, spam='1st')
             mock_get_horizontal_key_from_lookup_value.assert_any_call(self.user.id)
             self.assertEqual(
                 self.user.id,
                 self.queryset._get_horizontal_key_from_lookup_value(self.user.id),
             )
             self.assertFalse(created)
-        self.assertEqual(a1.pk, a2.pk)
+        self.assertEqual(one1.pk, one2.pk)
 
     def test_update_or_create(self):
         # Create
@@ -145,15 +145,15 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
-            a1, created = OneModel.objects.update_or_create(user=self.user, spam='1st',
-                                                                 defaults={'egg': 'scrambled'})
+            one1, created = OneModel.objects.update_or_create(user=self.user, spam='1st',
+                                                              defaults={'egg': 'scrambled'})
             mock_get_horizontal_key_from_lookup_value.assert_any_call(self.user)
             self.assertEqual(
                 self.user.id,
                 self.queryset._get_horizontal_key_from_lookup_value(self.user),
             )
             self.assertTrue(created)
-            self.assertEqual('scrambled', a1.egg)
+            self.assertEqual('scrambled', one1.egg)
 
         # Update
         with patch.object(
@@ -161,16 +161,16 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
-            a2, created = OneModel.objects.update_or_create(user=self.user, spam='1st',
-                                                                 defaults={'egg': 'fried'})
+            one2, created = OneModel.objects.update_or_create(user=self.user, spam='1st',
+                                                              defaults={'egg': 'fried'})
             mock_get_horizontal_key_from_lookup_value.assert_any_call(self.user)
             self.assertEqual(
                 self.user.id,
                 self.queryset._get_horizontal_key_from_lookup_value(self.user),
             )
             self.assertFalse(created)
-            self.assertEqual('scrambled', a1.egg)
-        self.assertEqual(a1.pk, a2.pk)
+            self.assertEqual('scrambled', one1.egg)
+        self.assertEqual(one1.pk, one2.pk)
 
     def test_update_or_create_by_id(self):
         # Create
@@ -179,15 +179,15 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
-            a1, created = OneModel.objects.update_or_create(user_id=self.user.id, spam='1st',
-                                                                 defaults={'egg': 'scrambled'})
+            one1, created = OneModel.objects.update_or_create(user_id=self.user.id, spam='1st',
+                                                              defaults={'egg': 'scrambled'})
             mock_get_horizontal_key_from_lookup_value.assert_any_call(self.user.id)
             self.assertEqual(
                 self.user.id,
                 self.queryset._get_horizontal_key_from_lookup_value(self.user.id),
             )
             self.assertTrue(created)
-            self.assertEqual('scrambled', a1.egg)
+            self.assertEqual('scrambled', one1.egg)
 
         # Update
         with patch.object(
@@ -195,16 +195,16 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
-            a2, created = OneModel.objects.update_or_create(user_id=self.user.id, spam='1st',
-                                                                 defaults={'egg': 'fried'})
+            one2, created = OneModel.objects.update_or_create(user_id=self.user.id, spam='1st',
+                                                              defaults={'egg': 'fried'})
             mock_get_horizontal_key_from_lookup_value.assert_any_call(self.user.id)
             self.assertEqual(
                 self.user.id,
                 self.queryset._get_horizontal_key_from_lookup_value(self.user.id),
             )
             self.assertFalse(created)
-            self.assertEqual('scrambled', a1.egg)
-        self.assertEqual(a1.pk, a2.pk)
+            self.assertEqual('scrambled', one1.egg)
+        self.assertEqual(one1.pk, one2.pk)
 
     def test_filter(self):
         OneModel.objects.create(user=self.user, spam='1st')

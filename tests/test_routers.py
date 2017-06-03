@@ -98,7 +98,9 @@ class HorizontalRouterMigrationTestCase(HorizontalBaseTestCase):
         )
 
     def test_not_allow_migrate_without_hints(self):
-        for horizontal_model in ('OneModel', 'ManyModel', 'ProxyBaseModel', 'ProxiedModel', 'ConcreteModel'):
+        for horizontal_model in (
+            'OneModel', 'ManyModel', 'ProxyBaseModel', 'ProxiedModel', 'ConcreteModel'
+        ):
             self.assertIsNone(
                 self.router.allow_migrate('default', 'tests', horizontal_model),
                 "Other database",
