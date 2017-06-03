@@ -16,13 +16,14 @@ class HorizontalMetadata(AbstractHorizontalMetadata):
     pass
 
 
-class HorizonParent(AbstractHorizontalModel):
+class OneModel(AbstractHorizontalModel):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.DO_NOTHING,
         db_constraint=False,
     )
     spam = models.CharField(max_length=15)
+    egg = models.CharField(max_length=15, null=True, default=None)
 
     objects = HorizontalManager()  # For Django<1.10
 
@@ -31,13 +32,13 @@ class HorizonParent(AbstractHorizontalModel):
         horizontal_key = 'user'
 
 
-class HorizonChild(AbstractHorizontalModel):
+class ManyModel(AbstractHorizontalModel):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.DO_NOTHING,
         db_constraint=False,
     )
-    parent = models.ForeignKey(HorizonParent, on_delete=models.CASCADE)
+    one = models.ForeignKey(OneModel, on_delete=models.CASCADE)
 
     objects = HorizontalManager()  # For Django<1.10
 
@@ -46,22 +47,26 @@ class HorizonChild(AbstractHorizontalModel):
         horizontal_key = 'user'
 
 
-class AnotherGroup(AbstractHorizontalModel):
+class ProxyBaseModel(AbstractHorizontalModel):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.DO_NOTHING,
         db_constraint=False,
     )
-    egg = models.CharField(max_length=15)
-    sushi = models.CharField(max_length=15, null=True, default=None, unique=True)
-
-    objects = HorizontalManager()  # For Django<1.10
+    sushi = models.CharField(max_length=15, unique=True)
 
     class Meta(object):
         horizontal_group = 'b'
         horizontal_key = 'user'
+
+
+class ProxiedModel(ProxyBaseModel):
+    tempura = models.CharField(max_length=15, unique=True)
+    karaage = models.CharField(max_length=15, unique=True)
+
+    class Meta(object):
         unique_together = (
-            ('user', 'egg'),
+            ('tempura', 'karaage'),
         )
 
 
@@ -71,12 +76,22 @@ class AbstractModel(AbstractHorizontalModel):
         on_delete=models.DO_NOTHING,
         db_constraint=False,
     )
-    pizza = models.CharField(max_length=15)
+    pizza = models.CharField(max_length=15, unique=True)
+    potate = models.CharField(max_length=15, unique=True)
 
     class Meta(object):
+        abstract = True
         horizontal_group = 'b'
         horizontal_key = 'user'
+        unique_together = (
+            ('pizza', 'potate'),
+        )
 
 
 class ConcreteModel(AbstractModel):
-    potate = models.CharField(max_length=15)
+    coke = models.CharField(max_length=15, unique=True)
+
+    class Meta(AbstractModel.Meta):
+        unique_together = (
+            ('pizza', 'coke'),
+        )
