@@ -41,7 +41,7 @@ class HorizontalRouter(object):
         if horizontal_index is None:
             return
         database = get_db_for_read_from_model_index(model, horizontal_index)
-        logger.debug("'%s' read from '%s'", model, database)
+        logger.debug("'%s' read from '%s'", model.__name__, database)
         return database
 
     def db_for_write(self, model, **hints):
@@ -49,7 +49,7 @@ class HorizontalRouter(object):
         if horizontal_index is None:
             return
         database = get_db_for_write_from_model_index(model, horizontal_index)
-        logger.debug("'%s' read from '%s'", model, database)
+        logger.debug("'%s' read from '%s'", model.__name__, database)
         return database
 
     def allow_relation(self, obj1, obj2, **hints):
