@@ -5,6 +5,9 @@ Django Horizon
 .. image:: https://travis-ci.org/uncovertruth/django-horizon.svg?branch=master
     :target: https://travis-ci.org/uncovertruth/django-horizon
 
+.. image:: https://api.codacy.com/project/badge/Grade/6f4ba73576904beaa41d68f40970bda9
+    :target: https://www.codacy.com/app/develop_2/django-horizon?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=uncovertruth/django-horizon&amp;utm_campaign=Badge_Grade
+
 .. image:: https://codecov.io/gh/uncovertruth/django-horizon/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/uncovertruth/django-horizon
 
