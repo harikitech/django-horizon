@@ -8,6 +8,12 @@ Django Horizon
 .. image:: https://api.codacy.com/project/badge/Grade/6f4ba73576904beaa41d68f40970bda9
     :target: https://www.codacy.com/app/develop_2/django-horizon?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=uncovertruth/django-horizon&amp;utm_campaign=Badge_Grade
 
+.. image:: https://codebeat.co/badges/74f07702-68ed-47e7-91e6-9088b0532342
+    :target: https://codebeat.co/projects/github-com-uncovertruth-django-horizon-master
+
+.. image:: https://www.codefactor.io/repository/github/uncovertruth/django-horizon/badge
+    :target: https://www.codefactor.io/repository/github/uncovertruth/django-horizon
+
 .. image:: https://codecov.io/gh/uncovertruth/django-horizon/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/uncovertruth/django-horizon
 
