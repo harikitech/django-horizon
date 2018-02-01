@@ -2,7 +2,7 @@ check-manifest==0.36
 coverage==4.4.2
 Django>=1.8
 flake8==3.5.0
-isort==4.2.15
+isort==4.3.0
 mock==2.0.0
 pymemcache==1.4.4
 readme-renderer==17.2
