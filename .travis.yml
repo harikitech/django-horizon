@@ -1,18 +1,10 @@
-sudo: true
+sudo: false
 dist: trusty
 language: python
 cache: pip
 matrix:
   fast_finish: true
   include:
-  - python: 2.7
-    env: TOX_ENV=py27-dj18
-  - python: 3.3
-    env: TOX_ENV=py33-dj18
-  - python: 3.4
-    env: TOX_ENV=py34-dj18
-  - python: 3.5
-    env: TOX_ENV=py34-dj18
   - python: 2.7
     env: TOX_ENV=py27-dj19
   - python: 3.4
@@ -37,6 +29,14 @@ matrix:
     env: TOX_ENV=py36-dj111
   - python: pypy3
     env: TOX_ENV=pypy3-dj111
+  - python: 3.4
+    env: TOX_ENV=py34-dj20
+  - python: 3.5
+    env: TOX_ENV=py35-dj20
+  - python: 3.6
+    env: TOX_ENV=py36-dj20
+  - python: pypy3
+    env: TOX_ENV=pypy3-dj20
   - python: 3.5
     env: TOX_ENV=py35-djdev
   - python: 3.6
@@ -52,13 +52,11 @@ matrix:
   allow_failures:
   - env: TOX_ENV=py35-djdev
   - env: TOX_ENV=py36-djdev
-  - env: TOX_ENV=pypy3-dj111
-  - env: TOX_ENV=py27-dj18
+  # Use old sqlite3 that does not support shared memory
   - env: TOX_ENV=py27-dj19
   - env: TOX_ENV=py27-dj110
   - env: TOX_ENV=py27-dj111
   - env: TOX_ENV=pypy-dj111
-  - env: TOX_ENV=py33-dj18
 addons:
   apt:
     sources:
@@ -80,4 +78,4 @@ deploy:
   on:
     tags: true
     repo: uncovertruth/django-horizon
-    condition: $TOX_ENV = py36-dj111
+    condition: $TOX_ENV = py36-dj20
