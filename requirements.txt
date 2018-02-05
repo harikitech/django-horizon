@@ -6,6 +6,6 @@ isort==4.3.2
 mock==2.0.0
 pymemcache==1.4.4
 readme-renderer==17.2
-Sphinx==1.6.6
+Sphinx==1.6.7
 tox==2.9.1
 twine==1.9.1
