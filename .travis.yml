@@ -1,5 +1,4 @@
 sudo: false
-dist: trusty
 language: python
 cache: pip
 matrix:
@@ -79,3 +78,5 @@ deploy:
     tags: true
     repo: uncovertruth/django-horizon
     condition: $TOX_ENV = py36-dj20
+notifications:
+  email: false
