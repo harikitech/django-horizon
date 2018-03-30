@@ -8,15 +8,16 @@ from django.test import TestCase, override_settings
 
 from horizon.utils import (
     get_config,
-    get_metadata_model,
-    get_group_from_model,
-    get_key_field_name_from_model,
     get_config_from_group,
     get_config_from_model,
     get_db_for_read_from_model_index,
     get_db_for_write_from_model_index,
+    get_group_from_model,
+    get_key_field_name_from_model,
+    get_metadata_model,
     get_or_create_index,
 )
+
 from .models import (
     ConcreteModel,
     HorizontalMetadata,
@@ -25,7 +26,6 @@ from .models import (
     ProxiedModel,
     ProxyBaseModel,
 )
-
 
 user_model = get_user_model()
 

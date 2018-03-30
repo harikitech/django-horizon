@@ -2,22 +2,22 @@
 
 from __future__ import absolute_import, unicode_literals
 
-from django.db import models
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.db import models
 from django.test import TestCase
 
 from horizon.models import AbstractHorizontalModel
+
 from .base import HorizontalBaseTestCase
 from .models import (
     ConcreteModel,
-    ManyModel,
     HorizontalMetadata,
+    ManyModel,
     OneModel,
     ProxiedModel,
     ProxyBaseModel,
 )
-
 
 user_model = get_user_model()
 

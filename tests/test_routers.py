@@ -2,24 +2,21 @@
 
 from __future__ import absolute_import, unicode_literals
 
-try:
-    from unittest.mock import patch
-except ImportError:
-    from mock import patch
+from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
 
 from horizon.routers import HorizontalRouter
+
 from .base import HorizontalBaseTestCase
 from .models import (
     ConcreteModel,
-    ManyModel,
     HorizontalMetadata,
+    ManyModel,
     OneModel,
     ProxiedModel,
     ProxyBaseModel,
 )
-
 
 user_model = get_user_model()
 

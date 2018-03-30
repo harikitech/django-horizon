@@ -2,18 +2,15 @@
 
 from __future__ import absolute_import, unicode_literals
 
-try:
-    from unittest.mock import patch
-except ImportError:
-    from mock import patch
+from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
 from django.db.utils import ProgrammingError
 
 from horizon.query import HorizontalQuerySet
+
 from .base import HorizontalBaseTestCase
 from .models import OneModel
-
 
 user_model = get_user_model()
 

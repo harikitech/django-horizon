@@ -15,7 +15,6 @@ from .utils import (
     get_or_create_index,
 )
 
-
 logger = logging.getLogger(__name__)
 
 
