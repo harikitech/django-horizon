@@ -20,7 +20,6 @@ from .utils import (
     get_or_create_index,
 )
 
-
 _HORIZON_OPTIONS = (
     'horizontal_group',
     'horizontal_key',

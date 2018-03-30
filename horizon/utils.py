@@ -10,7 +10,6 @@ from django.core.exceptions import ImproperlyConfigured
 
 from .settings import get_config
 
-
 logger = logging.getLogger(__name__)
 
 

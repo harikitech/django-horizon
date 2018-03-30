@@ -2,14 +2,11 @@
 
 from __future__ import absolute_import, unicode_literals
 
-from django.db import models
 from django.conf import settings
+from django.db import models
 
 from horizon.manager import HorizontalManager
-from horizon.models import (
-    AbstractHorizontalMetadata,
-    AbstractHorizontalModel,
-)
+from horizon.models import AbstractHorizontalMetadata, AbstractHorizontalModel
 
 
 class HorizontalMetadata(AbstractHorizontalMetadata):
