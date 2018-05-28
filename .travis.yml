@@ -35,7 +35,6 @@ matrix:
   allow_failures:
   - env: TOX_ENV=py35-djmaster
   - env: TOX_ENV=py36-djmaster
-  # Use old sqlite3 that does not support shared memory
   - env: TOX_ENV=py27-dj111
   - env: TOX_ENV=pypy-dj111
 addons:
@@ -59,6 +58,8 @@ deploy:
   on:
     tags: true
     repo: uncovertruth/django-horizon
-    condition: $TOX_ENV = py36-dj20
+    condition: "$TOX_ENV = py36-dj20"
 notifications:
   email: false
+  slack:
+    secure: HPa3L23uNVcVnXsNtkMkIuhOEOLTqvSbcXPy3ScjHEuZrRqKhHaX6DPx2/6PXR6azyKmywoqcVxDNfAiK5ditlvefxKyp8a1Csduwd4uGEqxAgxM72F/Qjfdb+QXCVp2M6ypjy8H9GSZ8pR888Bea1Vid49c8z1JEr3FbTw/acfY4WGeZTrbD2ZEsVYSEKJR/vS7/YxEY3jO4qxRoGul056LhZvabKACM0TseQkPIDLbY+/f/21LOz1d6TRdukRV9PdOp2lN4wJSloNja3j1x3Ox/auX2U1wAekH33HWyMi3au6X0zdLrEoNhCWdkfRy22qr/JSqeq+qo8xo4bzPrrMuUYzSBtMSp16BWQj47NSJAOhyIlMvtKbRgFdHuu+4XxRpGcmg+MjFdtyzOOjXldMr95adI9+RKzWLQUvBtxJFptDW48yf2t+VIP1WnNfHHoIjj1rROyGTGTE36FrbjAi3V5oRWYBkpKMEmlcVmN/1DKoQ8GECyDKlw0R84xYWUau/LpM20THFzEnPgqUY/DG7a9aqYR/Szo0FY4NuHcW3jzBKeH0xQEOps2OeVVfr7CHcq9NK1AAFYOMeEi5LR6yMfBpbzfVKSRU5EgvmcH8Sr5pBP77UMxiersCEwK3GvwLGrioV4KY598GTGti4tcRaoc1PU+7+EmeFdsGPi4w=
