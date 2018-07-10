@@ -1,13 +1,8 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import, unicode_literals
-
 from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
 
 from horizon.routers import HorizontalRouter
-
 from .base import HorizontalBaseTestCase
 from .models import (
     ConcreteModel,
