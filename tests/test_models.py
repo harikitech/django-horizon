@@ -1,12 +1,7 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import, unicode_literals
-
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.test import TestCase
-
 from horizon.models import AbstractHorizontalModel
 
 from .base import HorizontalBaseTestCase

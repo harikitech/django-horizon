@@ -1,12 +1,7 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import, unicode_literals
-
 from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
 from django.db.utils import ProgrammingError
-
 from horizon.query import HorizontalQuerySet
 
 from .base import HorizontalBaseTestCase
