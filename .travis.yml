@@ -34,16 +34,32 @@ matrix:
     python: 3.5
   - env: TOX_ENV=py36-dj20
     python: 3.6
+  - env: TOX_ENV=py37-dj20
+    python: 3.7
   - env: TOX_ENV=pypy3-dj20
+    python: pypy3
+  - env: TOX_ENV=py35-dj21
+    python: 3.5
+  - env: TOX_ENV=py36-dj21
+    python: 3.6
+  - env: TOX_ENV=py37-dj21
+    python: 3.7
+  - env: TOX_ENV=pypy3-dj21
     python: pypy3
   - env: TOX_ENV=py35-djmaster
     python: 3.5
   - env: TOX_ENV=py36-djmaster
     python: 3.6
+  - env: TOX_ENV=py37-djmaster
+    python: 3.7
   - env: TOX_ENV=flake8
+    python: 3.7
   - env: TOX_ENV=isort
+    python: 3.7
   - env: TOX_ENV=readme
+    python: 3.7
   - env: TOX_ENV=check-manifest
+    python: 3.7
   allow_failures:
   - env: TOX_ENV=py35-djmaster
   - env: TOX_ENV=py36-djmaster
