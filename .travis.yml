@@ -1,6 +1,9 @@
 sudo: false
 language: python
-cache: pip
+cache:
+  pip: true
+  directories:
+  - $TRAVIS_BUILD_DIR/.tox
 addons:
   apt:
     sources:

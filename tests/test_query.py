@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
 from django.db.utils import ProgrammingError
-from horizon.query import HorizontalQuerySet
+from horizon.query import QuerySet
 
 from .base import HorizontalBaseTestCase
 from .models import OneModel
@@ -10,16 +10,16 @@ from .models import OneModel
 user_model = get_user_model()
 
 
-class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
+class QuerySetTestCase(HorizontalBaseTestCase):
     def setUp(self):
-        super(HorizontalQuerySetTestCase, self).setUp()
+        super(QuerySetTestCase, self).setUp()
         self.user = user_model.objects.create_user('spam')
-        self.queryset = HorizontalQuerySet()
+        self.queryset = QuerySet()
 
     def test_get(self):
         OneModel.objects.create(user=self.user, spam='1st')
         with patch.object(
-            HorizontalQuerySet,
+            QuerySet,
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
@@ -33,7 +33,7 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
     def test_get_by_id(self):
         OneModel.objects.create(user=self.user, spam='1st')
         with patch.object(
-            HorizontalQuerySet,
+            QuerySet,
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
@@ -46,7 +46,7 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
 
     def test_create(self):
         with patch.object(
-            HorizontalQuerySet,
+            QuerySet,
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
@@ -59,7 +59,7 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
 
     def test_create_by_id(self):
         with patch.object(
-            HorizontalQuerySet,
+            QuerySet,
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
@@ -73,7 +73,7 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
     def test_get_or_create(self):
         # Create
         with patch.object(
-            HorizontalQuerySet,
+            QuerySet,
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
@@ -87,7 +87,7 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
 
         # Get
         with patch.object(
-            HorizontalQuerySet,
+            QuerySet,
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
@@ -103,7 +103,7 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
     def test_get_or_create_by_id(self):
         # Create
         with patch.object(
-            HorizontalQuerySet,
+            QuerySet,
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
@@ -117,7 +117,7 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
 
         # Get
         with patch.object(
-            HorizontalQuerySet,
+            QuerySet,
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
@@ -133,7 +133,7 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
     def test_update_or_create(self):
         # Create
         with patch.object(
-            HorizontalQuerySet,
+            QuerySet,
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
@@ -149,7 +149,7 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
 
         # Update
         with patch.object(
-            HorizontalQuerySet,
+            QuerySet,
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
@@ -167,7 +167,7 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
     def test_update_or_create_by_id(self):
         # Create
         with patch.object(
-            HorizontalQuerySet,
+            QuerySet,
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
@@ -183,7 +183,7 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
 
         # Update
         with patch.object(
-            HorizontalQuerySet,
+            QuerySet,
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
@@ -202,7 +202,7 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
         OneModel.objects.create(user=self.user, spam='1st')
         OneModel.objects.create(user=self.user, spam='2nd')
         with patch.object(
-            HorizontalQuerySet,
+            QuerySet,
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
@@ -218,7 +218,7 @@ class HorizontalQuerySetTestCase(HorizontalBaseTestCase):
         OneModel.objects.create(user=self.user, spam='1st')
         OneModel.objects.create(user=self.user, spam='2nd')
         with patch.object(
-            HorizontalQuerySet,
+            QuerySet,
             '_get_horizontal_key_from_lookup_value',
             wraps=self.queryset._get_horizontal_key_from_lookup_value,
         ) as mock_get_horizontal_key_from_lookup_value:
