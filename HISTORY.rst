@@ -13,7 +13,7 @@ Not released
 
 * Migrate to ``QuerySet`` as a mixin
 
-1.1.0 (2018-03-30)_
+1.1.0 (2018-03-30)
 ------------------
 
 * Drop support for Django 1.9, 1.10
