@@ -4,12 +4,6 @@ cache:
   pip: true
   directories:
   - $TRAVIS_BUILD_DIR/.tox
-addons:
-  apt:
-    sources:
-    - travis-ci/sqlite3
-    packages:
-    - sqlite3
 env:
   global:
   - secure: u0BkKcx3XkU+fi+Hf+Lmp+BMntW/QYme4GRrwKVQh1Blfunz6FIYxcNJDRwvrccGgj9BtUVg5O1Il7Hxo/k0OGb1glJni3G5C98qRroX5qG3jk+ptWLSYadE82CRUEB72UMKcuDq2lu+R6ACEQ/EQzLhVkX8GuFQ7/W6QRzbf6LN/OfOuz2OiZH/7WPxKk73EKQZtvslEqTI6zB0+RRjCt1ObHeZ4etYzRblO+gcVfeN1ySPeS5oyC8PwxjHMhpYMcMQLDjmqUU/ARQfDgAQVOyVKb7j/INmesWSRoBUWjkkeTiE9Wtx4MdAQ1bLnIhWOyDk5PXGDcK2SEOq2BMP0mScfqKzqUDQ2VGpVGR6ukBvkvN9OjZXR0TDx/ryrLgAG+z4pvzzN/XJbyVSGkH4tK2X8mua5kisb25OBEuMNDLRhubrHfWpTgWuYCNSPGQR2iE/LKRbDqWj5svMdbYmhBxV1/eLDga0KZo4PStyKfzJHYm/Qz7TfwgxMYV0WXofZmIi4LtX7j0LyEho62PwAPm8aiYfRFxXXtd5UFEEVZGSHXDUL5y4sILARzQmrIL4ZP9z52fxeBePpY6i8Otuov0GjtLifg0FjBGo5N7D1ANT00wKlbJCARstNtIElN/11dILdJE2y1KJeYiZI1SfoRUJk0TdJjgji5MIz6IHTQ0=
@@ -57,7 +51,7 @@ matrix:
   - env: TOX_ENV=py37-djmaster
     sudo: true  # TODO Remove when supported
     dist: xenial
-    python: 3.6
+    python: 3.7
   - env: TOX_ENV=flake8
     python: 3.6
   - env: TOX_ENV=isort
