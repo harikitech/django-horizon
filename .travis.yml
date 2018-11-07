@@ -63,6 +63,7 @@ matrix:
   allow_failures:
   - env: TOX_ENV=py35-djmaster
   - env: TOX_ENV=py36-djmaster
+  - env: TOX_ENV=py37-djmaster
   # Use old sqlite3 that does not support shared memory
   - env: TOX_ENV=py27-dj111
   - env: TOX_ENV=pypy-dj111

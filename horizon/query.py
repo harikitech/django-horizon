@@ -28,7 +28,8 @@ class HorizontalQuerySetMixin(object):
 
     def _create_object_from_params(self, lookup, *args, **kwargs):
         self._set_horizontal_key_from_params(lookup)
-        return super(HorizontalQuerySetMixin, self)._create_object_from_params(lookup, *args, **kwargs)
+        return super(HorizontalQuerySetMixin, self)._create_object_from_params(
+            lookup, *args, **kwargs)
 
     def _extract_model_params(self, defaults, **kwargs):
         self._set_horizontal_key_from_params(kwargs)
