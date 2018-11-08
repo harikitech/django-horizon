@@ -26,9 +26,10 @@ class HorizontalQuerySetMixin(object):
         lookup_value = kwargs.get(key_field.attname, None) or kwargs.get(key_field.name, None)
         self._horizontal_key = self._get_horizontal_key_from_lookup_value(lookup_value)
 
-    def _create_object_from_params(self, lookup, params):
+    def _create_object_from_params(self, lookup, *args, **kwargs):
         self._set_horizontal_key_from_params(lookup)
-        return super(HorizontalQuerySetMixin, self)._create_object_from_params(lookup, params)
+        return super(HorizontalQuerySetMixin, self)._create_object_from_params(
+            lookup, *args, **kwargs)
 
     def _extract_model_params(self, defaults, **kwargs):
         self._set_horizontal_key_from_params(kwargs)
