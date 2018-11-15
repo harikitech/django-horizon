@@ -15,6 +15,7 @@ exclude .editorconfig
 exclude .pyup.yml
 exclude .travis.yml
 exclude requirements.txt
+exclude requirements-dev.txt
 exclude runmakemigrations.py
 exclude tox.ini
 
