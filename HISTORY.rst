@@ -2,9 +2,10 @@
 History
 =======
 
-Not released
-------------
+1.1.2 (2018-11-15)
+------------------
 
+* Update ``_create_object_from_params`` to new interface
 * Add support for Django 2.1
 * Add support for Python 3.7
 
