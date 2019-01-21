@@ -1,78 +1,55 @@
+dist: xenial
 sudo: false
+
 language: python
-cache:
-  pip: true
-  directories:
-  - $TRAVIS_BUILD_DIR/.tox
+python:
+- 2.7
+- 3.4
+- 3.5
+- 3.6
+- 3.7
+
+cache: pip
+
 env:
   global:
   - secure: u0BkKcx3XkU+fi+Hf+Lmp+BMntW/QYme4GRrwKVQh1Blfunz6FIYxcNJDRwvrccGgj9BtUVg5O1Il7Hxo/k0OGb1glJni3G5C98qRroX5qG3jk+ptWLSYadE82CRUEB72UMKcuDq2lu+R6ACEQ/EQzLhVkX8GuFQ7/W6QRzbf6LN/OfOuz2OiZH/7WPxKk73EKQZtvslEqTI6zB0+RRjCt1ObHeZ4etYzRblO+gcVfeN1ySPeS5oyC8PwxjHMhpYMcMQLDjmqUU/ARQfDgAQVOyVKb7j/INmesWSRoBUWjkkeTiE9Wtx4MdAQ1bLnIhWOyDk5PXGDcK2SEOq2BMP0mScfqKzqUDQ2VGpVGR6ukBvkvN9OjZXR0TDx/ryrLgAG+z4pvzzN/XJbyVSGkH4tK2X8mua5kisb25OBEuMNDLRhubrHfWpTgWuYCNSPGQR2iE/LKRbDqWj5svMdbYmhBxV1/eLDga0KZo4PStyKfzJHYm/Qz7TfwgxMYV0WXofZmIi4LtX7j0LyEho62PwAPm8aiYfRFxXXtd5UFEEVZGSHXDUL5y4sILARzQmrIL4ZP9z52fxeBePpY6i8Otuov0GjtLifg0FjBGo5N7D1ANT00wKlbJCARstNtIElN/11dILdJE2y1KJeYiZI1SfoRUJk0TdJjgji5MIz6IHTQ0=
+  matrix:
+  - DJANGO=1.11
+  - DJANGO=2.0
+  - DJANGO=2.1
+  - DJANGO=master
+
 matrix:
   fast_finish: true
   include:
-  - env: TOX_ENV=py27-dj111
-    python: 2.7
-  - env: TOX_ENV=py34-dj111
-    python: 3.4
-  - env: TOX_ENV=pypy-dj111
-    python: pypy
-  - env: TOX_ENV=py35-dj111
-    python: 3.5
-  - env: TOX_ENV=py36-dj111
-    python: 3.6
-  - env: TOX_ENV=pypy3-dj111
-    python: pypy3
-  - env: TOX_ENV=py34-dj20
-    python: 3.4
-  - env: TOX_ENV=py35-dj20
-    python: 3.5
-  - env: TOX_ENV=py36-dj20
-    python: 3.6
-  - env: TOX_ENV=py37-dj20
-    sudo: true  # TODO Remove when supported
-    dist: xenial
+  - env: TOXENV=flake8
     python: 3.7
-  - env: TOX_ENV=pypy3-dj20
-    python: pypy3
-  - env: TOX_ENV=py35-dj21
-    python: 3.5
-  - env: TOX_ENV=py36-dj21
-    python: 3.6
-  - env: TOX_ENV=py37-dj21
-    sudo: true  # TODO Remove when supported
-    dist: xenial
+  - env: TOXENV=isort
     python: 3.7
-  - env: TOX_ENV=pypy3-dj21
-    python: pypy3
-  - env: TOX_ENV=py35-djmaster
-    python: 3.5
-  - env: TOX_ENV=py36-djmaster
-    python: 3.6
-  - env: TOX_ENV=py37-djmaster
-    sudo: true  # TODO Remove when supported
-    dist: xenial
+  - env: TOXENV=readme
     python: 3.7
-  - env: TOX_ENV=flake8
-    python: 3.6
-  - env: TOX_ENV=isort
-    python: 3.6
-  - env: TOX_ENV=readme
-    python: 3.6
-  - env: TOX_ENV=check-manifest
-    python: 3.6
+  - env: TOXENV=check-manifest
+    python: 3.7
+  exclude:
+  - python: 2.7
+    env: DJANGO=2.0
+  - python: 2.7
+    env: DJANGO=2.1
+  - python: 3.4
+    env: DJANGO=2.1
   allow_failures:
-  - env: TOX_ENV=py35-djmaster
-  - env: TOX_ENV=py36-djmaster
-  - env: TOX_ENV=py37-djmaster
+  - env: DJANGO=master
   # Use old sqlite3 that does not support shared memory
-  - env: TOX_ENV=py27-dj111
-  - env: TOX_ENV=pypy-dj111
+  - env: DJANGO=1.11
+    python: 2.7
+
 install:
-- pip install -U pip setuptools tox wheel
+- travis_retry pip install -U pip tox-travis setuptools wheel
 before_script:
 - sqlite3 -version
 script:
-- tox -e "${TOX_ENV}"
+- tox
 deploy:
   provider: pypi
   user: uncovertruth
@@ -82,7 +59,8 @@ deploy:
   on:
     tags: true
     repo: uncovertruth/django-horizon
-    condition: "$TOX_ENV = py36-dj20"
+    python: 3.7
+    condition: $DJANGO = 2.1
 notifications:
   email: false
   slack:
