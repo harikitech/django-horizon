@@ -2,6 +2,7 @@ from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
 from django.db.utils import ProgrammingError
+
 from horizon.query import QuerySet
 
 from .base import HorizontalBaseTestCase
