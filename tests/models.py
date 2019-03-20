@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+
 from horizon.manager import HorizontalManager
 from horizon.models import AbstractHorizontalMetadata, AbstractHorizontalModel
 
