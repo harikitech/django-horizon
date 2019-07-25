@@ -1,2 +1,2 @@
 -r requirements.txt
-Django==2.1.7
+Django==2.2.3
